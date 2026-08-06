@@ -1,0 +1,66 @@
+name: weatheria
+
+services:
+  postgres:
+    image: timescale/timescaledb:latest-pg16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: weatheria
+      POSTGRES_USER: weatheria
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+    volumes:
+      - weatheria-pgdata:/var/lib/postgresql/data
+      # Applied on first start only. Re-running against an existing volume is a no-op.
+      - ./db/init:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U weatheria -d weatheria"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  ingest:
+    build:
+      context: .
+      dockerfile: src/Weatheria.Ingest/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Weatheria: "Host=postgres;Database=weatheria;Username=weatheria;Password=${POSTGRES_PASSWORD}"
+      # Required. The wiki blocks default agents, so the worker refuses to start without it.
+      Weatheria__UserAgent: ${WEATHERIA_USER_AGENT:?set WEATHERIA_USER_AGENT in .env}
+      Weatheria__RunBackfill: ${WEATHERIA_RUN_BACKFILL:-false}
+
+  api:
+    build:
+      context: .
+      dockerfile: src/Weatheria.Api/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      ConnectionStrings__Weatheria: "Host=postgres;Database=weatheria;Username=weatheria;Password=${POSTGRES_PASSWORD}"
+      # Bound to all interfaces for development from the Windows box.
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+    ports:
+      - "8080:8080"
+
+  grafana:
+    image: grafana/grafana:latest
+    restart: unless-stopped
+    depends_on:
+      - postgres
+    environment:
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+    volumes:
+      - weatheria-grafana:/var/lib/grafana
+    ports:
+      - "3000:3000"
+
+volumes:
+  weatheria-pgdata:
+  weatheria-grafana:

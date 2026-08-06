@@ -1,0 +1,34 @@
+[
+  {
+    "examine": "It's a raw lobster.",
+    "id": 377,
+    "members": true,
+    "lowalch": 60,
+    "limit": 15000,
+    "value": 150,
+    "highalch": 90,
+    "icon": "Raw lobster.png",
+    "name": "Raw lobster"
+  },
+  {
+    "examine": "A powerful weapon.",
+    "id": 4151,
+    "members": true,
+    "lowalch": 48000,
+    "limit": 8,
+    "value": 120001,
+    "highalch": 72000,
+    "icon": "Abyssal whip.png",
+    "name": "Abyssal whip"
+  },
+  {
+    "examine": "A gold coin.",
+    "id": 617,
+    "members": false,
+    "lowalch": 0,
+    "value": 1,
+    "highalch": 0,
+    "icon": "Coins 1.png",
+    "name": "Coins"
+  }
+]

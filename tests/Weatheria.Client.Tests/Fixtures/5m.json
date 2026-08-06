@@ -1,0 +1,23 @@
+{
+  "data": {
+    "2": {
+      "avgHighPrice": 186.5,
+      "highPriceVolume": 12500,
+      "avgLowPrice": 181.2,
+      "lowPriceVolume": 9800
+    },
+    "4151": {
+      "avgHighPrice": 823005,
+      "highPriceVolume": 4,
+      "avgLowPrice": 801051,
+      "lowPriceVolume": 2
+    },
+    "13652": {
+      "avgHighPrice": null,
+      "highPriceVolume": 0,
+      "avgLowPrice": null,
+      "lowPriceVolume": 0
+    }
+  },
+  "timestamp": 1785974400
+}

@@ -1,0 +1,18 @@
+bin/
+obj/
+.vs/
+.idea/
+*.user
+*.suo
+
+node_modules/
+dist/
+.vite/
+
+.env
+*.log
+
+# Never commit the dataset or its dumps
+/backups/
+*.dump
+*.sql.gz

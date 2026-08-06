@@ -1,0 +1,29 @@
+{
+  "data": [
+    {
+      "timestamp": 1754438400,
+      "avgHighPrice": 823005,
+      "avgLowPrice": 801051,
+      "highPriceVolume": 10,
+      "lowPriceVolume": 3
+    },
+    {
+      "timestamp": 1754524800,
+      "avgHighPrice": 825140,
+      "avgLowPrice": 799002,
+      "highPriceVolume": 14,
+      "lowPriceVolume": 9
+    },
+    {
+      "timestamp": 1754611200,
+      "avgHighPrice": null,
+      "avgLowPrice": null,
+      "highPriceVolume": 0,
+      "lowPriceVolume": 0
+    }
+  ],
+  "itemId": 4151,
+  "startTimestamp": 1754438400,
+  "endTimestamp": 1785974400,
+  "timestep": 86400
+}
