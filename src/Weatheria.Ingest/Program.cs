@@ -7,12 +7,23 @@ using Weatheria.Ingest.Workers;
 
 var builder = Host.CreateApplicationBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Weatheria")
-    ?? throw new InvalidOperationException("ConnectionStrings__Weatheria is not configured.");
+// Blank, not just missing: appsettings.json ships empty placeholders for both, so a
+// null check alone lets the empty string through to fail further downstream.
+var connectionString = builder.Configuration.GetConnectionString("Weatheria");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "ConnectionStrings__Weatheria is not configured. Set the ConnectionStrings__Weatheria "
+        + "environment variable, or run 'dotnet user-secrets set ConnectionStrings:Weatheria \"...\"' "
+        + "in src/Weatheria.Ingest for local development.");
+}
 
-var userAgent = builder.Configuration["Weatheria:UserAgent"]
-    ?? throw new InvalidOperationException(
+var userAgent = builder.Configuration["Weatheria:UserAgent"];
+if (string.IsNullOrWhiteSpace(userAgent))
+{
+    throw new InvalidOperationException(
         "Weatheria__UserAgent is not configured. The OSRS wiki blocks default agents.");
+}
 
 builder.Services.AddWeatheriaData(connectionString);
 

@@ -13,7 +13,9 @@ services:
       # Applied on first start only. Re-running against an existing volume is a no-op.
       - ./db/init:/docker-entrypoint-initdb.d:ro
     ports:
-      - "5432:5432"
+      # Host 5433: a native Postgres install already owns 5432 on the dev box.
+      # Inside the compose network the other services still reach it on 5432.
+      - "5433:5432"
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U weatheria -d weatheria"]
       interval: 10s

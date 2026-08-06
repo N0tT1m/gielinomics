@@ -35,6 +35,28 @@ dotnet build
 dotnet test
 ```
 
+`db/init/01_schema.sql` is applied by the container on first start only. If the schema
+changes, `docker compose down -v` to drop the volume and let it re-apply.
+
+### Running the API or ingest worker outside Docker
+
+Compose injects `ConnectionStrings__Weatheria` as an environment variable; a bare
+`dotnet run` or an IDE launch gets nothing, and `appsettings.json` holds an empty
+placeholder. Put the value in user secrets once per project:
+
+```bash
+# Host port is 5433 -- 5432 is left to any native Postgres install.
+CS="Host=localhost;Port=5433;Database=weatheria;Username=weatheria;Password=$POSTGRES_PASSWORD"
+dotnet user-secrets set "ConnectionStrings:Weatheria" "$CS" --project src/Weatheria.Api
+dotnet user-secrets set "ConnectionStrings:Weatheria" "$CS" --project src/Weatheria.Ingest
+dotnet user-secrets set "Weatheria:UserAgent" "$WEATHERIA_USER_AGENT" --project src/Weatheria.Ingest
+```
+
+User secrets load **only** in the Development environment. The `launchSettings.json`
+profiles set it; if you run the built binary directly, export `ASPNETCORE_ENVIRONMENT=Development`
+(`DOTNET_ENVIRONMENT` for the ingest worker) or the host falls back to the empty
+placeholder and throws at startup.
+
 `WEATHERIA_USER_AGENT` is **required**, not advisory. The wiki pre-emptively blocks a list of default agents — including `RestSharp`, `python-requests` and `curl` — so the client throws at construction rather than letting you discover it as a 403 storm in production. Use something like `weatheria/0.1 (github.com/N0tT1m/weatheria)`.
 
 ## Build order

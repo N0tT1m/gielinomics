@@ -2,8 +2,16 @@ using Weatheria.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("Weatheria")
-    ?? throw new InvalidOperationException("ConnectionStrings__Weatheria is not configured.");
+// Blank, not just missing: appsettings.json ships an empty placeholder, so a null
+// check alone lets the empty string through to fail deeper in AddWeatheriaData.
+var connectionString = builder.Configuration.GetConnectionString("Weatheria");
+if (string.IsNullOrWhiteSpace(connectionString))
+{
+    throw new InvalidOperationException(
+        "ConnectionStrings__Weatheria is not configured. Set the ConnectionStrings__Weatheria "
+        + "environment variable, or run 'dotnet user-secrets set ConnectionStrings:Weatheria \"...\"' "
+        + "in src/Weatheria.Api for local development.");
+}
 
 builder.Services.AddWeatheriaData(connectionString);
 builder.Services.AddOpenApi();
