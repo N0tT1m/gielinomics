@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <ItemGroup>
+    <ProjectReference Include="../Gielinomics.Data/Gielinomics.Data.csproj" />
+  </ItemGroup>
+
+</Project>

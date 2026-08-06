@@ -1,4 +1,4 @@
--- Weatheria schema.
+-- Gielinomics schema.
 -- Applied automatically by the postgres container on first start (docker-entrypoint-initdb.d).
 
 CREATE EXTENSION IF NOT EXISTS timescaledb;

@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Gielinomics.Alerts/Gielinomics.Alerts.csproj" />
+    <Project Path="src/Gielinomics.Api/Gielinomics.Api.csproj" />
+    <Project Path="src/Gielinomics.Client/Gielinomics.Client.csproj" />
+    <Project Path="src/Gielinomics.Data/Gielinomics.Data.csproj" />
+    <Project Path="src/Gielinomics.Ingest/Gielinomics.Ingest.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Gielinomics.Client.Tests/Gielinomics.Client.Tests.csproj" />
+  </Folder>
+</Solution>

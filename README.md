@@ -1,8 +1,8 @@
-# Weatheria
+# Gielinomics
 
 A time-series service that retains OSRS market history the official APIs don't, with a query API and alerting layer on top.
 
-Named for the sky island whose entire purpose is accumulating long-run observation data to forecast what's coming.
+Gielinor plus economics: the long-run price record for a world that only ever publishes the last few hours of it.
 
 > **Status: scaffold.** Structure, contracts and schema are in place; the implementations are `NotImplementedException` stubs marked with `TODO`. See [`plan.md`](plan.md) for the full design.
 
@@ -12,24 +12,24 @@ Named for the sky island whose entire purpose is accumulating long-run observati
 
 ```
 src/
-├── Weatheria.Client/    # NuGet: Weatheria.Osrs.Client. References nothing else here.
-├── Weatheria.Data/      # Npgsql + Dapper repositories
-├── Weatheria.Ingest/    # BackgroundServices: poll, gap-repair, backfill, staleness
-├── Weatheria.Api/       # ASP.NET Core minimal API
-└── Weatheria.Alerts/    # Rule evaluation, GE tax, webhook validation
+├── Gielinomics.Client/    # NuGet: Gielinomics.Osrs.Client. References nothing else here.
+├── Gielinomics.Data/      # Npgsql + Dapper repositories
+├── Gielinomics.Ingest/    # BackgroundServices: poll, gap-repair, backfill, staleness
+├── Gielinomics.Api/       # ASP.NET Core minimal API
+└── Gielinomics.Alerts/    # Rule evaluation, GE tax, webhook validation
 tests/
-├── Weatheria.Client.Tests/   # recorded fixtures, no network in CI
-└── Weatheria.Api.Tests/
+├── Gielinomics.Client.Tests/   # recorded fixtures, no network in CI
+└── Gielinomics.Api.Tests/
 db/init/                 # schema, applied on first container start
 web/                     # Phase 6: Vite + React + TS
 ```
 
-`Weatheria.Client` must not reference any other project in this solution. It's a standalone package that happens to have this repo as its first consumer.
+`Gielinomics.Client` must not reference any other project in this solution. It's a standalone package that happens to have this repo as its first consumer.
 
 ## Running
 
 ```bash
-cp .env.example .env      # fill in POSTGRES_PASSWORD and WEATHERIA_USER_AGENT
+cp .env.example .env      # fill in POSTGRES_PASSWORD and GIELINOMICS_USER_AGENT
 docker compose up -d postgres
 dotnet build
 dotnet test
@@ -40,16 +40,16 @@ changes, `docker compose down -v` to drop the volume and let it re-apply.
 
 ### Running the API or ingest worker outside Docker
 
-Compose injects `ConnectionStrings__Weatheria` as an environment variable; a bare
+Compose injects `ConnectionStrings__Gielinomics` as an environment variable; a bare
 `dotnet run` or an IDE launch gets nothing, and `appsettings.json` holds an empty
 placeholder. Put the value in user secrets once per project:
 
 ```bash
 # Host port is 5433 -- 5432 is left to any native Postgres install.
-CS="Host=localhost;Port=5433;Database=weatheria;Username=weatheria;Password=$POSTGRES_PASSWORD"
-dotnet user-secrets set "ConnectionStrings:Weatheria" "$CS" --project src/Weatheria.Api
-dotnet user-secrets set "ConnectionStrings:Weatheria" "$CS" --project src/Weatheria.Ingest
-dotnet user-secrets set "Weatheria:UserAgent" "$WEATHERIA_USER_AGENT" --project src/Weatheria.Ingest
+CS="Host=localhost;Port=5433;Database=gielinomics;Username=gielinomics;Password=$POSTGRES_PASSWORD"
+dotnet user-secrets set "ConnectionStrings:Gielinomics" "$CS" --project src/Gielinomics.Api
+dotnet user-secrets set "ConnectionStrings:Gielinomics" "$CS" --project src/Gielinomics.Ingest
+dotnet user-secrets set "Gielinomics:UserAgent" "$GIELINOMICS_USER_AGENT" --project src/Gielinomics.Ingest
 ```
 
 User secrets load **only** in the Development environment. The `launchSettings.json`
@@ -57,7 +57,7 @@ profiles set it; if you run the built binary directly, export `ASPNETCORE_ENVIRO
 (`DOTNET_ENVIRONMENT` for the ingest worker) or the host falls back to the empty
 placeholder and throws at startup.
 
-`WEATHERIA_USER_AGENT` is **required**, not advisory. The wiki pre-emptively blocks a list of default agents — including `RestSharp`, `python-requests` and `curl` — so the client throws at construction rather than letting you discover it as a 403 storm in production. Use something like `weatheria/0.1 (github.com/N0tT1m/weatheria)`.
+`GIELINOMICS_USER_AGENT` is **required**, not advisory. The wiki pre-emptively blocks a list of default agents — including `RestSharp`, `python-requests` and `curl` — so the client throws at construction rather than letting you discover it as a 403 storm in production. Use something like `gielinomics/0.1 (github.com/N0tT1m/gielinomics)`.
 
 ## Build order
 

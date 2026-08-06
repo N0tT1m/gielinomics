@@ -12,8 +12,8 @@
 
   <PropertyGroup>
     <Authors>Nathan Moritz</Authors>
-    <Product>Weatheria</Product>
-    <RepositoryUrl>https://github.com/N0tT1m/weatheria</RepositoryUrl>
+    <Product>Gielinomics</Product>
+    <RepositoryUrl>https://github.com/N0tT1m/gielinomics</RepositoryUrl>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
   </PropertyGroup>
 

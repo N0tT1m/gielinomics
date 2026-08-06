@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <UserSecretsId>0fcd1d9d-e30f-42a2-8130-030647303888</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0" />
+    <PackageReference Include="Dapper" Version="2.1.66" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="../Gielinomics.Data/Gielinomics.Data.csproj" />
+    <ProjectReference Include="../Gielinomics.Alerts/Gielinomics.Alerts.csproj" />
+  </ItemGroup>
+
+</Project>
