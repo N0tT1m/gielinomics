@@ -55,11 +55,14 @@ public static class MarketEndpoints
 
         group.MapGet("/movers", GetMoversAsync)
             .WithName("GetMovers")
-            .WithSummary("Ranks items by percentage price change over a window.");
+            .WithSummary("Ranks items by percentage price change over a window.")
+            .Produces<MoversResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
         group.MapGet("/spreads", GetSpreadsAsync)
             .WithName("GetSpreads")
-            .WithSummary("Scans for flip margins, adjusted for Grand Exchange tax.");
+            .WithSummary("Scans for flip margins, adjusted for Grand Exchange tax.")
+            .Produces<SpreadScan>();
 
         return app;
     }
@@ -70,6 +73,7 @@ public static class MarketEndpoints
     /// <param name="window">Lookback window, such as 24h.</param>
     /// <param name="interval">Granularity to measure over.</param>
     /// <param name="minVolume">Minimum traded volume, to exclude illiquid noise.</param>
+    /// <param name="minPrice">Minimum price at both ends of the window.</param>
     /// <param name="limit">Maximum rows.</param>
     /// <param name="cancellationToken">Cancels the read.</param>
     /// <returns>The movers.</returns>
@@ -79,6 +83,7 @@ public static class MarketEndpoints
         string? window,
         string? interval,
         long? minVolume,
+        long? minPrice,
         int? limit,
         CancellationToken cancellationToken)
     {
@@ -103,12 +108,15 @@ public static class MarketEndpoints
                 stepSeconds,
                 DateTimeOffset.UtcNow - lookback,
                 minVolume ?? 100,
+                // 50 gp is not arbitrary: below it the Grand Exchange charges no tax, which
+                // is the game's own statement that these items are not worth trading.
+                minPrice ?? 50,
                 QueryConventions.ClampPageSize(limit),
                 cancellationToken)
             .ConfigureAwait(false);
 
         QueryConventions.CacheFor(response, TimeSpan.FromMinutes(2));
-        return Results.Ok(new { window = lookback, stepSeconds, movers });
+        return Results.Ok(new MoversResponse(lookback, stepSeconds, movers));
     }
 
     /// <summary>Scans for tax-adjusted flip margins.</summary>
@@ -171,14 +179,10 @@ public static class MarketEndpoints
 
         QueryConventions.CacheFor(response, TimeSpan.FromMinutes(1));
 
-        return Results.Ok(new
-        {
-            taxRate = rules.Rate,
-            taxCapPerItem = rules.CapPerItem,
-            // Surfaced so a caller can tell an over-charged estimate from a correct one: until
-            // the exempt set has been resolved from the item mapping, exempt items are taxed.
-            exemptionsResolved = taxRules.ExemptionsResolved,
-            candidates = results.Take(pageSize),
-        });
+        return Results.Ok(new SpreadScan(
+            rules.Rate,
+            rules.CapPerItem,
+            taxRules.ExemptionsResolved,
+            [.. results.Take(pageSize)]));
     }
 }

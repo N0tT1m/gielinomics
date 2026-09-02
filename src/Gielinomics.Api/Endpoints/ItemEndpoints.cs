@@ -18,19 +18,28 @@ public static class ItemEndpoints
 
         group.MapGet("/", SearchAsync)
             .WithName("SearchItems")
-            .WithSummary("Searches items by name, membership and buy limit.");
+            .WithSummary("Searches items by name, membership and buy limit.")
+            .Produces<Page<ItemSummary>>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
         group.MapGet("/{id:int}", GetAsync)
             .WithName("GetItem")
-            .WithSummary("Fetches one item's reference metadata.");
+            .WithSummary("Fetches one item's reference metadata.")
+            .Produces<ItemDetail>()
+            .Produces(StatusCodes.Status304NotModified)
+            .Produces(StatusCodes.Status404NotFound);
 
         group.MapGet("/{id:int}/prices", GetPricesAsync)
             .WithName("GetItemPrices")
-            .WithSummary("Fetches this platform's retained price history for an item.");
+            .WithSummary("Fetches this platform's retained price history for an item.")
+            .Produces<ItemPriceSeries>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
         group.MapGet("/{id:int}/stats", GetStatsAsync)
             .WithName("GetItemStats")
-            .WithSummary("Computes volatility, mean spread and liquidity over retained history.");
+            .WithSummary("Computes volatility, mean spread and liquidity over retained history.")
+            .Produces<ItemStats>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
         return app;
     }
@@ -160,7 +169,7 @@ public static class ItemEndpoints
             .ConfigureAwait(false);
 
         QueryConventions.CacheFor(response, TimeSpan.FromMinutes(1));
-        return Results.Ok(new { itemId = id, stepSeconds, from = lower, to = upper, points });
+        return Results.Ok(new ItemPriceSeries(id, stepSeconds, lower, upper, points));
     }
 
     /// <summary>Computes derived statistics.</summary>

@@ -100,7 +100,11 @@ public sealed class MarketQueryRepository(NpgsqlDataSource dataSource)
         LEFT JOIN items i ON i.id = b.item_id
         WHERE b.start_price IS NOT NULL
           AND b.end_price IS NOT NULL
-          AND b.start_price > 0
+          -- A floor on BOTH ends, not just the start: a percentage move is only meaningful
+          -- between two prices somebody could actually have traded at. Without it the ranking
+          -- fills with items whose first recorded bar was a lone 2 gp trade.
+          AND b.start_price >= @minPrice
+          AND b.end_price >= @minPrice
           AND b.volume >= @minVolume
         ORDER BY abs((b.end_price - b.start_price) / b.start_price) DESC
         LIMIT @limit
@@ -282,6 +286,10 @@ public sealed class MarketQueryRepository(NpgsqlDataSource dataSource)
     /// <param name="stepSeconds">Granularity to measure over.</param>
     /// <param name="from">Start of the window.</param>
     /// <param name="minVolume">Minimum total volume, to exclude illiquid noise.</param>
+    /// <param name="minPrice">
+    /// Minimum price at both ends of the window. A move from 2 gp to 115 gp is a true
+    /// 5,650% change and completely useless: it is one trade on an item nobody trades.
+    /// </param>
     /// <param name="limit">Maximum rows.</param>
     /// <param name="cancellationToken">Cancels the read.</param>
     /// <returns>The movers, largest absolute move first.</returns>
@@ -289,6 +297,7 @@ public sealed class MarketQueryRepository(NpgsqlDataSource dataSource)
         int stepSeconds,
         DateTimeOffset from,
         long minVolume,
+        long minPrice,
         int limit,
         CancellationToken cancellationToken = default)
     {
@@ -297,7 +306,7 @@ public sealed class MarketQueryRepository(NpgsqlDataSource dataSource)
         {
             var rows = await connection.QueryAsync<MarketMover>(new CommandDefinition(
                 MoversSql,
-                new { stepSeconds, from = from.UtcDateTime, minVolume, limit },
+                new { stepSeconds, from = from.UtcDateTime, minVolume, minPrice, limit },
                 cancellationToken: cancellationToken)).ConfigureAwait(false);
 
             return [.. rows];

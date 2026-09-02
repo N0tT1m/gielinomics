@@ -41,7 +41,7 @@ app.UseExceptionHandler();
 app.UseStatusCodePages();
 
 app.MapOpenApi();
-app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+app.MapGet("/health", () => Results.Ok(new HealthResponse("ok"))).Produces<HealthResponse>();
 
 app.MapItemEndpoints();
 app.MapMarketEndpoints();

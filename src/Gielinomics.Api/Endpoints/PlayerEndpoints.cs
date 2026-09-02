@@ -33,20 +33,32 @@ public static class PlayerEndpoints
 
         group.MapGet("/{name}", GetAsync)
             .WithName("GetPlayer")
-            .WithSummary("Resolves an account by any name it has ever used.");
+            .WithSummary("Resolves an account by any name it has ever used.")
+            .Produces<PlayerResponse>()
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapGet("/{name}/history", GetHistoryAsync)
             .WithName("GetPlayerHistory")
-            .WithSummary("Per-skill history for a tracked account.");
+            .WithSummary("Per-skill history for a tracked account.")
+            .Produces<PlayerHistoryResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapGet("/{name}/gains", GetGainsAsync)
             .WithName("GetPlayerGains")
-            .WithSummary("Experience and levels gained over a period.");
+            .WithSummary("Experience and levels gained over a period.")
+            .Produces<PlayerGainsResponse>()
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         group.MapPost("/{name}/track", TrackAsync)
             .WithName("TrackPlayer")
             .WithSummary("Starts tracking an account. Authenticated: tracking adds polling load.")
-            .AddEndpointFilter<ApiTokenEndpointFilter>();
+            .AddEndpointFilter<ApiTokenEndpointFilter>()
+            .Produces<Player>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status404NotFound);
 
         return app;
     }
@@ -72,7 +84,7 @@ public static class PlayerEndpoints
         var names = await players.GetNamesAsync(player.Id, cancellationToken).ConfigureAwait(false);
 
         QueryConventions.CacheFor(response, TimeSpan.FromMinutes(5));
-        return Results.Ok(new { player, names });
+        return Results.Ok(new PlayerResponse(player, names));
     }
 
     /// <summary>Per-skill history.</summary>
@@ -118,14 +130,12 @@ public static class PlayerEndpoints
 
         QueryConventions.CacheFor(response, TimeSpan.FromMinutes(5));
 
-        return Results.Ok(new
-        {
-            player = player.DisplayName,
-            // The mapping the indices decode under, so a client is never guessing what skill 21 is.
-            mappingVersion = HiscoreMapping.Current.Version,
-            skillNames = HiscoreMapping.Current.SkillNames,
-            samples,
-        });
+        // The mapping is echoed back so a client never has to guess what skill 21 is.
+        return Results.Ok(new PlayerHistoryResponse(
+            player.DisplayName,
+            HiscoreMapping.Current.Version,
+            HiscoreMapping.Current.SkillNames,
+            samples));
     }
 
     /// <summary>Gains over a period.</summary>
@@ -168,13 +178,7 @@ public static class PlayerEndpoints
 
         QueryConventions.CacheFor(response, TimeSpan.FromMinutes(5));
 
-        return Results.Ok(new
-        {
-            player = player.DisplayName,
-            period = window,
-            overall,
-            skills = bySkill,
-        });
+        return Results.Ok(new PlayerGainsResponse(player.DisplayName, window, overall, bySkill));
     }
 
     /// <summary>

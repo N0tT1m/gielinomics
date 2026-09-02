@@ -23,11 +23,14 @@ public static class IngestEndpoints
 
         group.MapGet("/status", GetStatusAsync)
             .WithName("GetIngestStatus")
-            .WithSummary("Per-feed last success and recent failure counts.");
+            .WithSummary("Per-feed last success and recent failure counts.")
+            .Produces<IngestStatusResponse>();
 
         group.MapGet("/coverage", GetCoverageAsync)
             .WithName("GetIngestCoverage")
-            .WithSummary("Fraction of the expected windows actually retained.");
+            .WithSummary("Fraction of the expected windows actually retained.")
+            .Produces<CoverageReport>()
+            .ProducesProblem(StatusCodes.Status400BadRequest);
 
         return app;
     }
@@ -45,7 +48,7 @@ public static class IngestEndpoints
         var feeds = await ingest.GetStatusAsync(cancellationToken).ConfigureAwait(false);
 
         QueryConventions.CacheFor(response, TimeSpan.FromSeconds(30));
-        return Results.Ok(new { feeds });
+        return Results.Ok(new IngestStatusResponse(feeds));
     }
 
     /// <summary>Coverage of a window at a granularity.</summary>

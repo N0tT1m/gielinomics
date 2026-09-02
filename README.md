@@ -4,9 +4,9 @@ A time-series service that retains OSRS market history the official APIs don't, 
 
 Gielinor plus economics: the long-run price record for a world that only ever publishes the last few hours of it.
 
-> **Status: Phases 1-5 implemented, plus account tracking.** Ingest, gap repair, the query API,
-> alerting and hiscore polling all run. Not built: the Phase 7 wiki Bucket sync and the Phase 6
-> frontend in `web/`. See [`plan.md`](plan.md) for the full design.
+> **Status: Phases 1-6 implemented, plus account tracking.** Ingest, gap repair, the query API,
+> alerting, hiscore polling and the frontend all run. Not built: the Phase 7 wiki Bucket sync.
+> See [`plan.md`](plan.md) for the full design.
 
 **The moat is the dataset.** The upstream APIs serve recent windows only, and `/timeseries` at a one-year lookback returns *daily* bars — there is no fine-grained backfill. The 5-minute series can only ever start the day ingest does, which is why Phase 1 is "turn the worker on and leave it running".
 
@@ -23,7 +23,7 @@ tests/
 ├── Gielinomics.Client.Tests/   # recorded fixtures, no network in CI
 └── Gielinomics.Ingest.Tests/   # scheduling arithmetic, failure classification
 db/init/                 # schema, applied on first container start
-web/                     # Phase 6: Vite + React + TS
+web/                     # Vite + React + TS, API types generated from the OpenAPI doc
 ```
 
 `Gielinomics.Client` must not reference any other project in this solution. It's a standalone package that happens to have this repo as its first consumer.
@@ -46,6 +46,8 @@ Then bring up the rest:
 docker compose up -d          # postgres, ingest, api, grafana
 curl localhost:8080/api/ingest/status    # per-feed health
 curl localhost:9091/metrics              # ingest Prometheus metrics
+
+cd web && npm install && npm run dev      # frontend on :5173, proxying /api to :8080
 ```
 
 The worker starts polling immediately and repairs backwards over its repair window on boot,
@@ -161,9 +163,21 @@ against the live API:
 Renames resolve through `player_names`, so an account looked up by an old name returns the same
 timeline rather than a 404 or a second, empty history.
 
+## Frontend
+
+`web/` is a Vite + React + TS app whose API types are **generated** from `/openapi/v1.json`
+(`npm run generate:api`), not hand-written. That is why every endpoint carries a
+`.Produces<T>()` annotation: an endpoint returning an anonymous object generates a client that
+types the response as `unknown`, which is worse than not generating one, because it looks like
+it worked.
+
+Charts are hand-rolled SVG on the validated data-viz palette — see [`web/README.md`](web/README.md)
+for the rules they hold to. The one worth repeating here: **a window with no trades breaks the
+line rather than interpolating across it.** Drawing a confident straight line through data this
+platform does not have is exactly the claim `ingest_runs` exists to stop anyone making.
+
 ## Still to build
 
-- **Phase 6, `web/`** — Vite + React + TS against the OpenAPI document.
 - **Phase 7** — wiki Bucket sync for drop tables and item stats, which unlocks the cross-source
   joins (GP/hr, gear comparison) that justify the whole design.
 - **Wise Old Man** — `plan.md` recommends consuming it for group and competition features

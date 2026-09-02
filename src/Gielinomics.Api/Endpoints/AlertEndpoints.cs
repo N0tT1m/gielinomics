@@ -34,11 +34,16 @@ public static class AlertEndpoints
 
         group.MapGet("/", ListAsync)
             .WithName("ListAlerts")
-            .WithSummary("Lists the calling token's alert rules.");
+            .WithSummary("Lists the calling token's alert rules.")
+            .Produces<AlertListResponse>()
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
 
         group.MapPost("/", CreateAsync)
             .WithName("CreateAlert")
-            .WithSummary("Creates an alert rule. The webhook host is validated on write.");
+            .WithSummary("Creates an alert rule. The webhook host is validated on write.")
+            .Produces<AlertRule>(StatusCodes.Status201Created)
+            .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized);
 
         return app;
     }
@@ -60,7 +65,7 @@ public static class AlertEndpoints
         // hand one caller another's rules.
         http.Response.Headers.CacheControl = "no-store";
 
-        return Results.Ok(new { rules });
+        return Results.Ok(new AlertListResponse(rules));
     }
 
     /// <summary>Creates a rule.</summary>
