@@ -52,6 +52,21 @@ Rules the charts hold to:
   baseline. Price is not, because an item trading between 800k and 810k would otherwise be a
   flat line against a zero axis, hiding the only movement there is.
 
+## Wiki data in the UI
+
+Two views exist only because of the cross-source join, and both had the same failure mode on
+first render: the wiki carries near-duplicate rows that crowd out anything useful.
+
+- **Gear** ranks equipment by a stat against its price. The wiki has a cosmetic, beta or Last
+  Man Standing variant of most notable weapons with identical bonuses and no price — four rows
+  of "Elder maul" ahead of anything buyable — so untradeable variants are hidden by default.
+- **Monsters** prices a drop table into gp per kill. Identical drops appearing under several
+  versions of one monster collapse to a single row; summing them reported a kill as worth
+  roughly twice what it is.
+
+Both surface what they could not price rather than quietly rounding it away: a kill's value is
+labelled a floor, and the rows that contribute nothing to it are counted in the caption.
+
 ## State
 
 The watchlist and the theme choice live in `localStorage`, per browser. Both reads and writes

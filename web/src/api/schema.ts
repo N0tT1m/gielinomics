@@ -39,6 +39,74 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/monsters/{name}/drops": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** A monster's drop table, priced against retained market history. */
+        get: operations["GetMonsterDrops"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/items/{id}/bonuses": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Equipment bonuses for an item. */
+        get: operations["GetItemBonuses"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/items/{id}/drops": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Everything known to drop this item. */
+        get: operations["GetItemDropSources"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/gear": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Ranks equipment by a stat against its current price. */
+        get: operations["GetGear"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/items": {
         parameters: {
             query?: never;
@@ -301,6 +369,28 @@ export interface components {
             config: components["schemas"]["JsonElement"];
             webhookUrl: string | null;
         };
+        DropTableEntry: {
+            itemName: string;
+            /** Format: int32 */
+            itemId: number | null;
+            sourceName: string;
+            sourceVersion: string | null;
+            rarityText: string | null;
+            /** Format: double */
+            rarity: number | null;
+            /** Format: int32 */
+            quantityLow: number | null;
+            /** Format: int32 */
+            quantityHigh: number | null;
+            /** Format: int32 */
+            rolls: number | null;
+            dropType: string | null;
+            rareDropTable: boolean;
+            /** Format: int64 */
+            unitPrice: number | null;
+            /** Format: double */
+            expectedValue: number | null;
+        };
         FeedStatus: {
             source: string;
             /** Format: date-time */
@@ -311,11 +401,67 @@ export interface components {
             /** Format: int64 */
             failuresLastDay: number;
         };
+        GearOption: {
+            pageName: string;
+            /** Format: int32 */
+            itemId: number | null;
+            name: string | null;
+            equipmentSlot: string | null;
+            /** Format: int32 */
+            statValue: number;
+            /** Format: int64 */
+            price: number | null;
+            /** Format: double */
+            gpPerPoint: number | null;
+        };
+        GearResponse: {
+            stat: string;
+            slot: string | null;
+            cheapestFirst: boolean;
+            options: components["schemas"]["GearOption"][];
+        };
         HealthResponse: {
             status: string;
         };
         IngestStatusResponse: {
             feeds: components["schemas"]["FeedStatus"][];
+        };
+        ItemBonuses: {
+            pageName: string;
+            /** Format: int32 */
+            itemId: number | null;
+            equipmentSlot: string | null;
+            combatStyle: string | null;
+            /** Format: int32 */
+            weaponAttackSpeed: number | null;
+            /** Format: int32 */
+            stabAttack: number | null;
+            /** Format: int32 */
+            slashAttack: number | null;
+            /** Format: int32 */
+            crushAttack: number | null;
+            /** Format: int32 */
+            rangeAttack: number | null;
+            /** Format: int32 */
+            magicAttack: number | null;
+            /** Format: int32 */
+            stabDefence: number | null;
+            /** Format: int32 */
+            slashDefence: number | null;
+            /** Format: int32 */
+            crushDefence: number | null;
+            /** Format: int32 */
+            rangeDefence: number | null;
+            /** Format: int32 */
+            magicDefence: number | null;
+            /** Format: int32 */
+            strengthBonus: number | null;
+            /** Format: int32 */
+            rangedStrengthBonus: number | null;
+            /** Format: int32 */
+            prayerBonus: number | null;
+            /** Format: double */
+            magicDamageBonus: number | null;
         };
         ItemDetail: {
             /** Format: int32 */
@@ -337,6 +483,11 @@ export interface components {
             firstSeen: string;
             /** Format: date-time */
             lastSeen: string;
+        };
+        ItemDropSourcesResponse: {
+            /** Format: int32 */
+            itemId: number;
+            sources: components["schemas"]["DropTableEntry"][];
         };
         ItemPriceSeries: {
             /** Format: int32 */
@@ -419,6 +570,28 @@ export interface components {
             changePercent: number;
             /** Format: int64 */
             volume: number;
+        };
+        Monster: {
+            pageName: string;
+            name: string | null;
+            versionAnchor: string | null;
+            /** Format: int32 */
+            combatLevel: number | null;
+            /** Format: int32 */
+            hitpoints: number | null;
+            /** Format: int32 */
+            slayerLevel: number | null;
+            /** Format: double */
+            slayerExperience: number | null;
+            members: boolean;
+        } | null;
+        MonsterDropsResponse: {
+            monster: components["schemas"]["Monster"];
+            /** Format: double */
+            totalExpectedValue: number;
+            /** Format: int32 */
+            unpricedDrops: number;
+            drops: components["schemas"]["DropTableEntry"][];
         };
         MoversResponse: {
             window: string;
@@ -547,6 +720,125 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
+    GetMonsterDrops: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                name: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MonsterDropsResponse"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GetItemBonuses: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemBonuses"];
+                };
+            };
+            /** @description Not Found */
+            404: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    GetItemDropSources: {
+        parameters: {
+            query?: {
+                limit?: number;
+            };
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ItemDropSourcesResponse"];
+                };
+            };
+        };
+    };
+    GetGear: {
+        parameters: {
+            query?: {
+                stat?: string;
+                slot?: string;
+                maxPrice?: number;
+                cheapestFirst?: boolean;
+                limit?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["GearResponse"];
+                };
+            };
+            /** @description Bad Request */
+            400: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/problem+json": components["schemas"]["ProblemDetails"];
+                };
+            };
+        };
+    };
     SearchItems: {
         parameters: {
             query?: {

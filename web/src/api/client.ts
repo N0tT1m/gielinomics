@@ -20,6 +20,12 @@ export type PlayerGainsResponse = Schema<'PlayerGainsResponse'>
 export type PlayerHistoryResponse = Schema<'PlayerHistoryResponse'>
 export type SkillGain = Schema<'SkillGain'>
 export type Player = Schema<'Player'>
+export type ItemBonuses = Schema<'ItemBonuses'>
+export type DropTableEntry = Schema<'DropTableEntry'>
+export type MonsterDropsResponse = Schema<'MonsterDropsResponse'>
+export type ItemDropSourcesResponse = Schema<'ItemDropSourcesResponse'>
+export type GearResponse = Schema<'GearResponse'>
+export type GearOption = Schema<'GearOption'>
 
 /** A page of search results. The generated name carries the element type. */
 export type ItemPage = Schema<'PageOfItemSummary'>
@@ -107,6 +113,26 @@ export const api = {
 
   getPlayerGains: (name: string, period: string, signal?: AbortSignal) =>
     get<PlayerGainsResponse>(`/players/${encodeURIComponent(name)}/gains${toQuery({ period })}`, signal),
+
+  getBonuses: (id: number, signal?: AbortSignal) => get<ItemBonuses>(`/items/${id}/bonuses`, signal),
+
+  getItemDrops: (id: number, limit: number, signal?: AbortSignal) =>
+    get<ItemDropSourcesResponse>(`/items/${id}/drops${toQuery({ limit })}`, signal),
+
+  getMonsterDrops: (name: string, limit: number, signal?: AbortSignal) =>
+    get<MonsterDropsResponse>(`/monsters/${encodeURIComponent(name)}/drops${toQuery({ limit })}`, signal),
+
+  getGear: (
+    query: {
+      stat?: string
+      slot?: string
+      maxPrice?: number
+      cheapestFirst?: boolean
+      includeUntradeable?: boolean
+      limit?: number
+    },
+    signal?: AbortSignal,
+  ) => get<GearResponse>(`/gear${toQuery(query)}`, signal),
 
   getPlayerHistory: (
     name: string,

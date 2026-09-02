@@ -82,6 +82,24 @@ pricesClient.AddStandardResilienceHandler(options =>
 pricesClient.AddHttpMessageHandler(provider =>
     new RateLimitingHandler(provider.GetRequiredKeyedService<RateLimiter>(UpstreamHosts.Wiki)));
 
+// The wiki's structured-data API shares the wiki's rate limit budget with the prices API --
+// same operator, and a weekly bulk sync should not be able to crowd out the 5-minute poll.
+var wikiClient = builder.Services.AddGielinomicsWikiClient();
+
+wikiClient.AddStandardResilienceHandler(options =>
+{
+    // A bucket page is 5000 rows of JSON, so the per-attempt timeout is generous compared to
+    // the price feeds'.
+    options.Retry.MaxRetryAttempts = 3;
+    options.Retry.UseJitter = true;
+    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(60);
+    options.TotalRequestTimeout.Timeout = TimeSpan.FromMinutes(4);
+    options.CircuitBreaker.SamplingDuration = TimeSpan.FromMinutes(2);
+});
+
+wikiClient.AddHttpMessageHandler(provider =>
+    new RateLimitingHandler(provider.GetRequiredKeyedService<RateLimiter>(UpstreamHosts.Wiki)));
+
 var hiscoresClient = builder.Services.AddGielinomicsHiscoresClient();
 
 hiscoresClient.AddStandardResilienceHandler(options =>
@@ -120,6 +138,10 @@ builder.Services.AddHostedService<MappingSyncWorker>();
 // Walks the tracked-account allowlist. Registered unconditionally: with nothing tracked it
 // idles without making a single request.
 builder.Services.AddHostedService<HiscoreWorker>();
+
+// Phase 7. Near-static reference data on a weekly cadence; this is what turns retained prices
+// into GP-per-kill and gear-per-coin answers.
+builder.Services.AddHostedService<BucketSyncWorker>();
 
 // Phase 1 non-negotiable: cannot be added retroactively.
 builder.Services.AddHostedService<StalenessMonitor>();

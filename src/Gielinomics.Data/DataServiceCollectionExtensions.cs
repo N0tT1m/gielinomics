@@ -38,6 +38,7 @@ public static class DataServiceCollectionExtensions
         services.AddSingleton<ApiUserRepository>();
         services.AddSingleton<AlertRepository>();
         services.AddSingleton<PlayerRepository>();
+        services.AddSingleton<WikiRepository>();
 
         return services;
     }

@@ -4,8 +4,8 @@ A time-series service that retains OSRS market history the official APIs don't, 
 
 Gielinor plus economics: the long-run price record for a world that only ever publishes the last few hours of it.
 
-> **Status: Phases 1-6 implemented, plus account tracking.** Ingest, gap repair, the query API,
-> alerting, hiscore polling and the frontend all run. Not built: the Phase 7 wiki Bucket sync.
+> **Status: all seven phases implemented, plus account tracking.** Ingest, gap repair, the query
+> API, alerting, hiscore polling, the frontend and the wiki Bucket sync all run.
 > See [`plan.md`](plan.md) for the full design.
 
 **The moat is the dataset.** The upstream APIs serve recent windows only, and `/timeseries` at a one-year lookback returns *daily* bars — there is no fine-grained backfill. The 5-minute series can only ever start the day ingest does, which is why Phase 1 is "turn the worker on and leave it running".
@@ -37,8 +37,13 @@ dotnet build
 dotnet test
 ```
 
-`db/init/01_schema.sql` is applied by the container on first start only. If the schema
-changes, `docker compose down -v` to drop the volume and let it re-apply.
+`db/init/*.sql` is applied by the container on first start only. If the schema changes,
+`docker compose down -v` to drop the volume and let it re-apply — or, on a database you do not
+want to drop, apply the new file by hand:
+
+```bash
+docker compose exec -T postgres psql -U gielinomics -d gielinomics < db/init/02_wiki.sql
+```
 
 Then bring up the rest:
 
@@ -65,6 +70,10 @@ so a fresh database has several hours of 5-minute history within a minute or two
 | `GET /api/market/spreads` | Margin scan, **tax-adjusted**, ranked by profit per buy limit. |
 | `GET /api/ingest/status` | Per-feed last success and recent failures. |
 | `GET /api/ingest/coverage` | Fraction of expected windows actually retained. |
+| `GET /api/gear` | Equipment ranked by a stat **against its price** — gp per point. |
+| `GET /api/monsters/{name}/drops` | A drop table priced against retained history: gp per kill. |
+| `GET /api/items/{id}/bonuses` | Equipment stats. |
+| `GET /api/items/{id}/drops` | Everything known to drop this item. |
 | `GET /api/players/{name}` | Resolves by **any** name the account has used. |
 | `GET /api/players/{name}/history` | Per-skill samples, with the mapping the indices decode under. |
 | `GET /api/players/{name}/gains` | XP and levels over `day`, `week`, `month` or `year`. |
@@ -176,10 +185,40 @@ for the rules they hold to. The one worth repeating here: **a window with no tra
 line rather than interpolating across it.** Drawing a confident straight line through data this
 platform does not have is exactly the claim `ingest_runs` exists to stop anyone making.
 
+## Wiki structured data
+
+The weekly Bucket sync is what makes the retained prices worth more than the price API alone.
+The wiki knows what drops and how often but nothing about what it costs; the price API knows
+what it costs but nothing about drops. Multiplying them is the product:
+
+```bash
+curl "localhost:8080/api/monsters/Abyssal%20demon/drops"   # ~9,000 gp per kill
+curl "localhost:8080/api/gear?stat=strength&slot=2h&cheapestFirst=true"
+```
+
+Weird Gloop replaced Semantic MediaWiki with their own **Bucket** extension — `action=ask` is
+hard-deprecated, so anything written about querying this wiki with SMW or Cargo is out of date.
+Four things about it were worth discovering before writing any code, and three of them changed
+the design:
+
+- **Booleans are not booleans.** A set flag arrives as an empty string and an unset one is
+  omitted from the row entirely. Modelling them as `bool?` is the obvious move and fails to
+  parse every row that has one.
+- **`orderBy` requires the field to be selected**, and offset paging without an order silently
+  repeats and skips rows. `BucketQuery` adds the ordering field to the projection for you.
+- **A bad query returns HTTP 200** with an `error` field. A status check alone reads a Lua
+  syntax error as a successful empty sync — which, for a full-replace load, would empty the table.
+- **Rarity is written for people.** Mostly `1/512`, but also `1/5,461.33` with a separator and a
+  decimal, and several hundred rows of `Varies`, `Unknown`, `Rare`. Those parse to **null**, not
+  to a guess: an invented probability becomes a gp-per-kill figure somebody acts on. They are
+  counted and reported so a kill's value is stated as a floor rather than a total.
+
+Each sync replaces a table wholesale in one transaction — Bucket exposes no row identity to
+upsert against — using `DELETE` rather than `TRUNCATE`, so readers keep seeing the previous
+contents until it commits rather than stalling on an exclusive lock.
+
 ## Still to build
 
-- **Phase 7** — wiki Bucket sync for drop tables and item stats, which unlocks the cross-source
-  joins (GP/hr, gear comparison) that justify the whole design.
 - **Wise Old Man** — `plan.md` recommends consuming it for group and competition features
   rather than reimplementing them. Nothing here touches it yet.
 

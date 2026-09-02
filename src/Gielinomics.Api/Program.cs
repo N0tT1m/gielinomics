@@ -48,6 +48,7 @@ app.MapMarketEndpoints();
 app.MapIngestEndpoints();
 app.MapAlertEndpoints();
 app.MapPlayerEndpoints();
+app.MapWikiEndpoints();
 
 // -----------------------------------------------------------------------------
 // Not mapped: the /api/players/* routes from plan.md.

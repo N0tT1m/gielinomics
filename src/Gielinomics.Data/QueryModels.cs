@@ -241,3 +241,118 @@ public sealed record SkillGain(
 /// <param name="SeenFrom">First observation.</param>
 /// <param name="SeenTo">Last observation, or null while current.</param>
 public sealed record PlayerName(string Name, DateTimeOffset SeenFrom, DateTimeOffset? SeenTo);
+
+/// <summary>Equipment bonuses for one item, as the wiki records them.</summary>
+/// <param name="PageName">Wiki page the stats came from.</param>
+/// <param name="ItemId">Resolved game ID, or null when the item is untradeable or unmapped.</param>
+/// <param name="EquipmentSlot">Slot the item occupies.</param>
+/// <param name="CombatStyle">Weapon class, for weapons.</param>
+/// <param name="WeaponAttackSpeed">Attack speed in game ticks, for weapons.</param>
+/// <param name="StabAttack">Stab attack bonus.</param>
+/// <param name="SlashAttack">Slash attack bonus.</param>
+/// <param name="CrushAttack">Crush attack bonus.</param>
+/// <param name="RangeAttack">Ranged attack bonus.</param>
+/// <param name="MagicAttack">Magic attack bonus.</param>
+/// <param name="StabDefence">Stab defence bonus.</param>
+/// <param name="SlashDefence">Slash defence bonus.</param>
+/// <param name="CrushDefence">Crush defence bonus.</param>
+/// <param name="RangeDefence">Ranged defence bonus.</param>
+/// <param name="MagicDefence">Magic defence bonus.</param>
+/// <param name="StrengthBonus">Melee strength bonus.</param>
+/// <param name="RangedStrengthBonus">Ranged strength bonus.</param>
+/// <param name="PrayerBonus">Prayer bonus.</param>
+/// <param name="MagicDamageBonus">Magic damage bonus, as a percentage.</param>
+public sealed record ItemBonuses(
+    string PageName,
+    int? ItemId,
+    string? EquipmentSlot,
+    string? CombatStyle,
+    int? WeaponAttackSpeed,
+    int? StabAttack,
+    int? SlashAttack,
+    int? CrushAttack,
+    int? RangeAttack,
+    int? MagicAttack,
+    int? StabDefence,
+    int? SlashDefence,
+    int? CrushDefence,
+    int? RangeDefence,
+    int? MagicDefence,
+    int? StrengthBonus,
+    int? RangedStrengthBonus,
+    int? PrayerBonus,
+    double? MagicDamageBonus);
+
+/// <summary>
+/// One line of a drop table, priced against retained market data.
+/// </summary>
+/// <param name="ItemName">The dropped item.</param>
+/// <param name="ItemId">Resolved game ID, or null when the drop is untradeable.</param>
+/// <param name="SourceName">What drops it.</param>
+/// <param name="SourceVersion">Which variant of the source, where the wiki distinguishes them.</param>
+/// <param name="RarityText">Rarity exactly as the wiki writes it.</param>
+/// <param name="Rarity">
+/// Parsed probability, or null when the wiki's text is qualitative — 'Varies', 'Unknown',
+/// 'Rare'. Null propagates into <paramref name="ExpectedValue"/> rather than being treated as
+/// zero, because an invented probability turns into a gp figure somebody would act on.
+/// </param>
+/// <param name="QuantityLow">Minimum quantity per drop.</param>
+/// <param name="QuantityHigh">Maximum quantity per drop.</param>
+/// <param name="Rolls">How many times the table is rolled.</param>
+/// <param name="DropType">Kind of source: combat, thieving, reward, and so on.</param>
+/// <param name="RareDropTable">Whether the drop comes from the shared rare drop table.</param>
+/// <param name="UnitPrice">Latest instant-buy price, from retained history.</param>
+/// <param name="ExpectedValue">Probability times mean quantity times price times rolls.</param>
+public sealed record DropTableEntry(
+    string ItemName,
+    int? ItemId,
+    string SourceName,
+    string? SourceVersion,
+    string? RarityText,
+    decimal? Rarity,
+    int? QuantityLow,
+    int? QuantityHigh,
+    int? Rolls,
+    string? DropType,
+    bool RareDropTable,
+    long? UnitPrice,
+    decimal? ExpectedValue);
+
+/// <summary>A monster's reference data.</summary>
+/// <param name="PageName">Wiki page.</param>
+/// <param name="Name">Display name.</param>
+/// <param name="VersionAnchor">Which variant of the page.</param>
+/// <param name="CombatLevel">Combat level.</param>
+/// <param name="Hitpoints">Hitpoints.</param>
+/// <param name="SlayerLevel">Slayer level required.</param>
+/// <param name="SlayerExperience">Slayer experience per kill.</param>
+/// <param name="Members">Members-only.</param>
+public sealed record Monster(
+    string PageName,
+    string? Name,
+    string? VersionAnchor,
+    int? CombatLevel,
+    int? Hitpoints,
+    int? SlayerLevel,
+    double? SlayerExperience,
+    bool Members);
+
+/// <summary>An item ranked by an equipment stat against its current price.</summary>
+/// <param name="PageName">Wiki page.</param>
+/// <param name="ItemId">Game ID.</param>
+/// <param name="Name">Item name from the price mapping.</param>
+/// <param name="EquipmentSlot">Slot.</param>
+/// <param name="StatValue">The stat being ranked on.</param>
+/// <param name="Price">Latest instant-buy price.</param>
+/// <param name="GpPerPoint">
+/// Price divided by the stat. Null when the stat is zero or negative, or the price is unknown —
+/// dividing by a zero bonus produces an infinity that would sort to the top.
+/// </param>
+public sealed record GearOption(
+    string PageName,
+    int? ItemId,
+    string? Name,
+    string? EquipmentSlot,
+    int StatValue,
+    long? Price,
+    decimal? GpPerPoint);

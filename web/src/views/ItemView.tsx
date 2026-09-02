@@ -4,6 +4,7 @@ import { PriceChart } from '../components/charts/PriceChart'
 import { VolumeChart } from '../components/charts/VolumeChart'
 import { exact, gp, percent } from '../components/charts/format'
 import { Card, ErrorNote, Loading, Segmented, StatTile } from '../components/ui'
+import { BonusesPanel } from '../components/BonusesPanel'
 import { useApi } from '../hooks/useApi'
 import { useWatchlist } from '../hooks/useWatchlist'
 
@@ -31,6 +32,17 @@ export function ItemView({ itemId, onBack }: { readonly itemId: number; readonly
     [itemId, range, interval],
   )
   const stats = useApi((signal) => api.getStats(itemId, { window: range, interval }, signal), [itemId, range, interval])
+
+  // Both come from the weekly wiki sync and 404 for anything that is not equipment or is not
+  // dropped, which is normal rather than an error — the panels simply do not render.
+  const bonuses = useApi(
+    (signal) => api.getBonuses(itemId, signal).catch(() => undefined),
+    [itemId],
+  )
+  const drops = useApi(
+    (signal) => api.getItemDrops(itemId, 15, signal).catch(() => undefined),
+    [itemId],
+  )
 
   const watchlist = useWatchlist()
   const name = item.data?.name ?? `Item ${itemId}`
@@ -93,6 +105,50 @@ export function ItemView({ itemId, onBack }: { readonly itemId: number; readonly
           )}
         </Card>
       </div>
+
+      {bonuses.data && (
+        <>
+          <BonusesPanel bonuses={bonuses.data} />
+          <div style={{ height: 16 }} />
+        </>
+      )}
+
+      {drops.data && drops.data.sources.length > 0 && (
+        <>
+          <Card
+            title="Dropped by"
+            note="From the wiki's drop tables. Rarity is shown exactly as the wiki records it."
+          >
+            <div className="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Source</th>
+                    <th>Variant</th>
+                    <th>Rarity</th>
+                    <th className="num">Qty</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {drops.data.sources.map((source, index) => (
+                    <tr key={`${source.sourceName}-${source.sourceVersion}-${index}`}>
+                      <td>{source.sourceName}</td>
+                      <td className="muted">{source.sourceVersion ?? '—'}</td>
+                      <td>{source.rarityText ?? '—'}</td>
+                      <td className="num">
+                        {source.quantityLow === source.quantityHigh
+                          ? (source.quantityLow ?? '—')
+                          : `${source.quantityLow ?? '?'}–${source.quantityHigh ?? '?'}`}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </Card>
+          <div style={{ height: 16 }} />
+        </>
+      )}
 
       {item.data && (
         <Card title="Details">

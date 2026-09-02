@@ -12,6 +12,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <!-- Lua literal quoting is an internal detail, but it is also the escaping that stops an
+         item name with an apostrophe becoming a syntax error in evaluated code. Worth testing
+         directly rather than only through the queries that happen to exercise it. -->
+    <InternalsVisibleTo Include="Gielinomics.Client.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Http" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" Version="9.0.0" />
   </ItemGroup>

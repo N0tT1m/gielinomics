@@ -1,17 +1,21 @@
 import { useState } from 'react'
 import { HealthView } from './views/HealthView'
 import { ItemView } from './views/ItemView'
+import { GearView } from './views/GearView'
 import { MarketView } from './views/MarketView'
+import { MonstersView } from './views/MonstersView'
 import { PlayersView } from './views/PlayersView'
 import { SearchView } from './views/SearchView'
 import { WatchlistView } from './views/WatchlistView'
 import { useTheme } from './hooks/useTheme'
 
-type Tab = 'market' | 'items' | 'watchlist' | 'players' | 'health'
+type Tab = 'market' | 'items' | 'gear' | 'monsters' | 'watchlist' | 'players' | 'health'
 
 const TABS: readonly { id: Tab; label: string }[] = [
   { id: 'market', label: 'Market' },
   { id: 'items', label: 'Items' },
+  { id: 'gear', label: 'Gear' },
+  { id: 'monsters', label: 'Monsters' },
   { id: 'watchlist', label: 'Watchlist' },
   { id: 'players', label: 'Accounts' },
   { id: 'health', label: 'Health' },
@@ -67,6 +71,10 @@ export function App() {
           <MarketView onOpenItem={openItem} />
         ) : tab === 'items' ? (
           <SearchView onOpenItem={openItem} />
+        ) : tab === 'gear' ? (
+          <GearView onOpenItem={openItem} />
+        ) : tab === 'monsters' ? (
+          <MonstersView onOpenItem={openItem} />
         ) : tab === 'watchlist' ? (
           <WatchlistView onOpenItem={openItem} />
         ) : tab === 'players' ? (
