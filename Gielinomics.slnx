@@ -8,5 +8,6 @@
   </Folder>
   <Folder Name="/tests/">
     <Project Path="tests/Gielinomics.Client.Tests/Gielinomics.Client.Tests.csproj" />
+    <Project Path="tests/Gielinomics.Ingest.Tests/Gielinomics.Ingest.Tests.csproj" />
   </Folder>
 </Solution>

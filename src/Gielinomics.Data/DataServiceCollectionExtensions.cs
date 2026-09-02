@@ -16,6 +16,11 @@ public static class DataServiceCollectionExtensions
         ArgumentNullException.ThrowIfNull(services);
         ArgumentException.ThrowIfNullOrWhiteSpace(connectionString);
 
+        // Before any repository is resolved: Dapper caches a materialiser per (type, query)
+        // the first time it sees one, and a handler registered after that cache is warm has
+        // no effect on the models already cached.
+        DapperTypeHandlers.Register();
+
         services.AddSingleton(_ =>
         {
             var builder = new NpgsqlDataSourceBuilder(connectionString);
@@ -25,6 +30,13 @@ public static class DataServiceCollectionExtensions
         services.AddSingleton<PriceRepository>();
         services.AddSingleton<ItemRepository>();
         services.AddSingleton<IngestRunRepository>();
+
+        // Read side. Registered here too so the API and the worker share one data source
+        // and therefore one connection pool.
+        services.AddSingleton<MarketQueryRepository>();
+        services.AddSingleton<IngestQueryRepository>();
+        services.AddSingleton<ApiUserRepository>();
+        services.AddSingleton<AlertRepository>();
 
         return services;
     }

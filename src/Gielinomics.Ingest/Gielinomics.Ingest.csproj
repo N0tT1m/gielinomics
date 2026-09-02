@@ -1,12 +1,12 @@
-<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <UserSecretsId>gielinomics-ingest</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="9.0.0" />
+    <PackageReference Include="System.Threading.RateLimiting" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http.Resilience" Version="9.0.0" />
     <PackageReference Include="OpenTelemetry.Extensions.Hosting" Version="1.11.1" />
     <PackageReference Include="OpenTelemetry.Exporter.Prometheus.AspNetCore" Version="1.11.0-beta.1" />
@@ -14,8 +14,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- The scheduling arithmetic and failure classification are internal implementation
+         details, but they are also the parts most worth testing directly. -->
+    <InternalsVisibleTo Include="Gielinomics.Ingest.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="../Gielinomics.Client/Gielinomics.Client.csproj" />
     <ProjectReference Include="../Gielinomics.Data/Gielinomics.Data.csproj" />
+    <ProjectReference Include="../Gielinomics.Alerts/Gielinomics.Alerts.csproj" />
   </ItemGroup>
 
 </Project>

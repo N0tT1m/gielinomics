@@ -1,3 +1,4 @@
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace Gielinomics.Client.Prices;
@@ -75,6 +76,25 @@ public sealed record ItemMapping
     /// <summary>Icon filename on the wiki.</summary>
     [JsonPropertyName("icon")]
     public string? Icon { get; init; }
+
+    /// <summary>
+    /// Fields the wire carried that this record does not model.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// The schema drift alarm reads this. A silently ignored new field is how a mapping sync
+    /// keeps reporting success while quietly dropping data the platform should be retaining,
+    /// so the worker logs when this is non-empty rather than letting it disappear.
+    /// </para>
+    /// <para>
+    /// <c>set</c>, not <c>init</c>, alone among the members here. <c>System.Text.Json</c> binds
+    /// an init-only extension data property as a constructor parameter and then refuses to
+    /// configure the type at all — which fails every <c>/mapping</c> call, not just the ones
+    /// carrying unknown fields.
+    /// </para>
+    /// </remarks>
+    [JsonExtensionData]
+    public IDictionary<string, JsonElement>? AdditionalData { get; set; }
 }
 
 /// <summary>

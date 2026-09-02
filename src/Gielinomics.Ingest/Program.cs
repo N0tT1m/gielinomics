@@ -1,11 +1,16 @@
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
+using System.Threading.RateLimiting;
+using Gielinomics.Alerts;
 using Gielinomics.Client;
 using Gielinomics.Data;
+using Gielinomics.Ingest.Infrastructure;
 using Gielinomics.Ingest.Workers;
+using OpenTelemetry.Metrics;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
 
-var builder = Host.CreateApplicationBuilder(args);
+// A web host for a worker, purely to serve the Prometheus scrape endpoint. Grafana reads
+// the ingest metrics directly; there are no application routes here beyond health.
+var builder = WebApplication.CreateBuilder(args);
 
 // Blank, not just missing: appsettings.json ships empty placeholders for both, so a
 // null check alone lets the empty string through to fail further downstream.
@@ -26,19 +31,53 @@ if (string.IsNullOrWhiteSpace(userAgent))
 }
 
 builder.Services.AddGielinomicsData(connectionString);
+builder.Services.AddGielinomicsAlerts();
 
-builder.Services
-    .AddGielinomicsClient(options => options.UserAgent = userAgent)
-    .AddStandardResilienceHandler(options =>
+// One limiter for the wiki, registered as a singleton so every handler instance draws on the
+// same budget. Jagex and Wise Old Man get their own the day a client for them exists — a
+// shared global limiter would let a backfill against one starve the live poll against another.
+builder.Services.AddKeyedSingleton<RateLimiter>(UpstreamHosts.Wiki, (_, _) =>
+    new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
     {
-        // Exponential backoff with jitter plus a circuit breaker, per upstream host.
-        // TODO: split budgets -- Jagex is less forgiving than the wiki.
+        // Two per second sustained with a small burst. The live polls need a handful of
+        // requests a minute; the burst is headroom for a gap sweep, and the deep queue
+        // means the hour-long backfill waits its turn rather than failing.
+        TokenLimit = 5,
+        TokensPerPeriod = 2,
+        ReplenishmentPeriod = TimeSpan.FromSeconds(1),
+        QueueLimit = 10_000,
+        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+        AutoReplenishment = true,
+    }));
+
+var pricesClient = builder.Services.AddGielinomicsClient(options => options.UserAgent = userAgent);
+
+pricesClient.AddStandardResilienceHandler(options =>
+    {
+        // Exponential backoff with jitter plus a circuit breaker. Attached to the prices
+        // client alone, so a second upstream gets its own budget rather than sharing this
+        // one -- Jagex is considerably less forgiving than the wiki.
         options.Retry.MaxRetryAttempts = 4;
         options.Retry.UseJitter = true;
         options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(30);
         options.TotalRequestTimeout.Timeout = TimeSpan.FromMinutes(2);
         options.CircuitBreaker.SamplingDuration = TimeSpan.FromMinutes(1);
     });
+
+// Registered after the resilience handler, so it sits inside it: every retry attempt is paced
+// too. Pacing only the first attempt would let a retry storm past the budget entirely.
+pricesClient.AddHttpMessageHandler(provider =>
+    new RateLimitingHandler(provider.GetRequiredKeyedService<RateLimiter>(UpstreamHosts.Wiki)));
+
+builder.Services.AddOpenTelemetry()
+    .ConfigureResource(resource => resource.AddService("gielinomics-ingest"))
+    .WithMetrics(metrics => metrics
+        .AddMeter(IngestTelemetry.SourceName)
+        .AddHttpClientInstrumentation()
+        .AddPrometheusExporter())
+    .WithTracing(tracing => tracing
+        .AddSource(IngestTelemetry.SourceName)
+        .AddHttpClientInstrumentation());
 
 // Both aggregate feeds share one worker type, parameterised by cadence and step.
 builder.Services.AddSingleton<IHostedService>(sp =>
@@ -52,12 +91,25 @@ builder.Services.AddHostedService<MappingSyncWorker>();
 // Phase 1 non-negotiable: cannot be added retroactively.
 builder.Services.AddHostedService<StalenessMonitor>();
 
+// Phase 5. Lives with the other scheduled jobs rather than in the API, which may be replicated.
+builder.Services.AddHostedService<AlertEvaluationWorker>();
+
 // One-shot. Off by default; enable for a single overnight run, then disable.
 if (builder.Configuration.GetValue("Gielinomics:RunBackfill", defaultValue: false))
 {
     builder.Services.AddHostedService<BackfillWorker>();
 }
 
-// TODO: ActivitySource + OpenTelemetry -- poll latency, rows written, gap counts.
+var app = builder.Build();
 
-await builder.Build().RunAsync();
+app.MapPrometheusScrapingEndpoint();
+app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+
+await app.RunAsync();
+
+/// <summary>Keys identifying an upstream host's rate limit budget.</summary>
+internal static class UpstreamHosts
+{
+    /// <summary>The OSRS wiki, which serves the prices API.</summary>
+    public const string Wiki = "wiki";
+}

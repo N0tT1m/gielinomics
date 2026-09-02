@@ -35,6 +35,11 @@ services:
       # Required. The wiki blocks default agents, so the worker refuses to start without it.
       Gielinomics__UserAgent: ${GIELINOMICS_USER_AGENT:?set GIELINOMICS_USER_AGENT in .env}
       Gielinomics__RunBackfill: ${GIELINOMICS_RUN_BACKFILL:-false}
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+    ports:
+      # Metrics only. /metrics is the Prometheus scrape endpoint, /health is a liveness probe;
+      # the worker serves no application routes. Host 9091 keeps 8080 free for the api service.
+      - "9091:8080"
 
   api:
     build:

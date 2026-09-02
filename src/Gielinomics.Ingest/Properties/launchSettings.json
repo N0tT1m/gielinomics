@@ -4,6 +4,8 @@
     "Gielinomics.Ingest": {
       "commandName": "Project",
       "dotnetRunMessages": true,
+      "//": "Serves /metrics and /health only; there are no application routes. The port is well clear of the API's so both can run locally at once.",
+      "applicationUrl": "http://localhost:5198",
       "environmentVariables": {
         "DOTNET_ENVIRONMENT": "Development"
       }
