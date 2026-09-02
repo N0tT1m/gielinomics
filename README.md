@@ -4,10 +4,9 @@ A time-series service that retains OSRS market history the official APIs don't, 
 
 Gielinor plus economics: the long-run price record for a world that only ever publishes the last few hours of it.
 
-> **Status: Phases 1-5 implemented.** Ingest, gap repair, the query API and alerting all run.
-> Not built: account tracking (`plan.md`'s scope decision recommends cutting it in favour of
-> Wise Old Man), the Phase 7 wiki Bucket sync, and the Phase 6 frontend in `web/`.
-> See [`plan.md`](plan.md) for the full design.
+> **Status: Phases 1-5 implemented, plus account tracking.** Ingest, gap repair, the query API,
+> alerting and hiscore polling all run. Not built: the Phase 7 wiki Bucket sync and the Phase 6
+> frontend in `web/`. See [`plan.md`](plan.md) for the full design.
 
 **The moat is the dataset.** The upstream APIs serve recent windows only, and `/timeseries` at a one-year lookback returns *daily* bars — there is no fine-grained backfill. The 5-minute series can only ever start the day ingest does, which is why Phase 1 is "turn the worker on and leave it running".
 
@@ -64,6 +63,10 @@ so a fresh database has several hours of 5-minute history within a minute or two
 | `GET /api/market/spreads` | Margin scan, **tax-adjusted**, ranked by profit per buy limit. |
 | `GET /api/ingest/status` | Per-feed last success and recent failures. |
 | `GET /api/ingest/coverage` | Fraction of expected windows actually retained. |
+| `GET /api/players/{name}` | Resolves by **any** name the account has used. |
+| `GET /api/players/{name}/history` | Per-skill samples, with the mapping the indices decode under. |
+| `GET /api/players/{name}/gains` | XP and levels over `day`, `week`, `month` or `year`. |
+| `POST /api/players/{name}/track` | **Authenticated.** Detects account type, then starts polling. |
 | `GET /api/alerts` | **Authenticated.** |
 | `POST /api/alerts` | **Authenticated.** Webhook host allowlisted on write. |
 
@@ -132,16 +135,39 @@ These could not have been added retroactively, so they shipped with the first wo
 The `/latest` poll is change-gated on trade timestamps: writing every response wholesale would
 be ~5.3M near-identical rows a day. In practice a 60-second poll writes a handful of rows.
 
+## Account tracking
+
+An allowlist, never a crawl: nothing is polled that somebody did not `POST .../track`. Each
+tracked account is revisited hourly, with requests spread across the interval rather than fired
+in a burst, and a separate rate limit budget from the wiki's — Jagex publishes no rate limit,
+which is not the same as not having one.
+
+Three things about the hiscores are worth knowing before changing any of this, all verified
+against the live API:
+
+- **`index_lite.json` names every field** (`id` *and* `name` per entry). The plan was written
+  around the positional CSV, where the ordering is the entire contract and one inserted boss
+  misattributes every field after it. The JSON removes that hazard, so it is the primary path;
+  `HiscoreCsvParser` remains as the documented fallback, and `HiscoreMapping` is versioned and
+  stamped onto every snapshot either way.
+- **A 404 is a result, not an error.** It means "not on this table", which is what makes
+  account type inferable at all — a main gets a 404 from the ironman table. It also means a
+  hardcore death or a rename, so the worker logs it rather than retrying.
+- **Rank is excluded from the snapshot dedup hash.** A dormant account's rank moves constantly
+  as other players pass it. Hashing it would mean the dedup never fires and
+  `hiscore_snapshots` grows by a row per account per hour forever. The hash covers what the
+  player *did* — levels, XP, activity scores. Rank is still stored and still queryable.
+
+Renames resolve through `player_names`, so an account looked up by an old name returns the same
+timeline rather than a 404 or a second, empty history.
+
 ## Still to build
 
 - **Phase 6, `web/`** — Vite + React + TS against the OpenAPI document.
 - **Phase 7** — wiki Bucket sync for drop tables and item stats, which unlocks the cross-source
   joins (GP/hr, gear comparison) that justify the whole design.
-- **Account tracking** — deliberately not built. `plan.md`'s scope decision recommends reading
-  Wise Old Man instead, since its snapshot history predates anything this project could start
-  collecting. The `players` / `hiscore_snapshots` / `skill_samples` tables remain in the schema
-  so the decision stays reversible, and `/api/players/*` is unmapped rather than shipped as
-  routes that can only answer 404.
+- **Wise Old Man** — `plan.md` recommends consuming it for group and competition features
+  rather than reimplementing them. Nothing here touches it yet.
 
 ## Before writing any margin logic
 

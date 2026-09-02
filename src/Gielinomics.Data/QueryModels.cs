@@ -188,3 +188,56 @@ public sealed record AlertRule(
 /// <param name="Id">Item game ID.</param>
 /// <param name="Name">Display name, null while the row is still a stub.</param>
 public sealed record ItemName(int Id, string? Name);
+
+/// <summary>A tracked account.</summary>
+/// <param name="Id">Stable internal ID. Names change; this does not.</param>
+/// <param name="DisplayName">Current display name.</param>
+/// <param name="NormalisedName">Lowercased, whitespace-normalised name used for lookup.</param>
+/// <param name="AccountType">Inferred hiscore table.</param>
+/// <param name="Tracked">Whether the poller includes this account.</param>
+/// <param name="AddedAt">When tracking began.</param>
+public sealed record Player(
+    long Id,
+    string DisplayName,
+    string NormalisedName,
+    string AccountType,
+    bool Tracked,
+    DateTimeOffset AddedAt);
+
+/// <summary>One skill's standing at one capture.</summary>
+/// <param name="CapturedAt">When the standing was first observed.</param>
+/// <param name="Skill">Positional skill index.</param>
+/// <param name="Rank">Rank, or null when unranked.</param>
+/// <param name="Level">Level, or null when unranked.</param>
+/// <param name="Xp">Experience, or null when unranked.</param>
+public sealed record SkillSample(
+    DateTimeOffset CapturedAt,
+    short Skill,
+    int? Rank,
+    short? Level,
+    long? Xp);
+
+/// <summary>Movement in one skill over a window.</summary>
+/// <param name="Skill">Positional skill index.</param>
+/// <param name="Name">Skill name, decoded from the snapshot's mapping version.</param>
+/// <param name="StartXp">Experience at the start of the window.</param>
+/// <param name="EndXp">Experience at the end.</param>
+/// <param name="GainedXp">The difference.</param>
+/// <param name="StartLevel">Level at the start.</param>
+/// <param name="EndLevel">Level at the end.</param>
+/// <param name="GainedLevels">Levels gained over the window.</param>
+public sealed record SkillGain(
+    short Skill,
+    string? Name,
+    long? StartXp,
+    long? EndXp,
+    long GainedXp,
+    short? StartLevel,
+    short? EndLevel,
+    int GainedLevels);
+
+/// <summary>A previous or current name for a tracked account.</summary>
+/// <param name="Name">The display name as seen.</param>
+/// <param name="SeenFrom">First observation.</param>
+/// <param name="SeenTo">Last observation, or null while current.</param>
+public sealed record PlayerName(string Name, DateTimeOffset SeenFrom, DateTimeOffset? SeenTo);

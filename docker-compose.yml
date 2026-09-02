@@ -51,6 +51,9 @@ services:
         condition: service_healthy
     environment:
       ConnectionStrings__Gielinomics: "Host=postgres;Database=gielinomics;Username=gielinomics;Password=${POSTGRES_PASSWORD}"
+      # The API calls the hiscores itself on POST /api/players/{name}/track, to infer the
+      # account type. Jagex blocks default agents too.
+      Gielinomics__UserAgent: ${GIELINOMICS_USER_AGENT:?set GIELINOMICS_USER_AGENT in .env}
       # Bound to all interfaces for development from the Windows box.
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
     ports:

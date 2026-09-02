@@ -1,5 +1,6 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Gielinomics.Client.Hiscores;
 using Gielinomics.Client.Prices;
 
 namespace Gielinomics.Client.Json;
@@ -18,6 +19,7 @@ namespace Gielinomics.Client.Json;
 [JsonSerializable(typeof(PriceEnvelope<PriceBar>), TypeInfoPropertyName = "PriceEnvelopePriceBar")]
 [JsonSerializable(typeof(IReadOnlyList<ItemMapping>), TypeInfoPropertyName = "IReadOnlyListItemMapping")]
 [JsonSerializable(typeof(TimeSeriesResponse))]
+[JsonSerializable(typeof(HiscoreProfile))]
 public sealed partial class GielinomicsJsonContext : JsonSerializerContext
 {
 }

@@ -37,6 +37,7 @@ public static class DataServiceCollectionExtensions
         services.AddSingleton<IngestQueryRepository>();
         services.AddSingleton<ApiUserRepository>();
         services.AddSingleton<AlertRepository>();
+        services.AddSingleton<PlayerRepository>();
 
         return services;
     }

@@ -1,6 +1,7 @@
 using Gielinomics.Alerts;
 using Gielinomics.Api.Endpoints;
 using Gielinomics.Api.Infrastructure;
+using Gielinomics.Client;
 using Gielinomics.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -23,6 +24,14 @@ builder.Services.AddGielinomicsData(connectionString);
 // API cannot fire the same rule once per replica.
 builder.Services.AddGielinomicsAlerts();
 
+// Only for account type detection on the track route. The API polls nothing itself; that is
+// the worker's job.
+builder.Services.AddGielinomicsClient(options =>
+    options.UserAgent = builder.Configuration["Gielinomics:UserAgent"]
+        ?? throw new InvalidOperationException(
+            "Gielinomics__UserAgent is not configured. Jagex and the wiki both block default agents."));
+builder.Services.AddGielinomicsHiscoresClient();
+
 builder.Services.AddOpenApi();
 builder.Services.AddProblemDetails();
 
@@ -38,6 +47,7 @@ app.MapItemEndpoints();
 app.MapMarketEndpoints();
 app.MapIngestEndpoints();
 app.MapAlertEndpoints();
+app.MapPlayerEndpoints();
 
 // -----------------------------------------------------------------------------
 // Not mapped: the /api/players/* routes from plan.md.

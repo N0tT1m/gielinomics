@@ -36,6 +36,19 @@ builder.Services.AddGielinomicsAlerts();
 // One limiter for the wiki, registered as a singleton so every handler instance draws on the
 // same budget. Jagex and Wise Old Man get their own the day a client for them exists — a
 // shared global limiter would let a backfill against one starve the live poll against another.
+// One request per second flat, with almost no burst. The hiscore walk is already spread
+// across its polling interval, so it never needs to spend a burst it does not have.
+builder.Services.AddKeyedSingleton<RateLimiter>(UpstreamHosts.Jagex, (_, _) =>
+    new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
+    {
+        TokenLimit = 2,
+        TokensPerPeriod = 1,
+        ReplenishmentPeriod = TimeSpan.FromSeconds(1),
+        QueueLimit = 10_000,
+        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+        AutoReplenishment = true,
+    }));
+
 builder.Services.AddKeyedSingleton<RateLimiter>(UpstreamHosts.Wiki, (_, _) =>
     new TokenBucketRateLimiter(new TokenBucketRateLimiterOptions
     {
@@ -69,6 +82,22 @@ pricesClient.AddStandardResilienceHandler(options =>
 pricesClient.AddHttpMessageHandler(provider =>
     new RateLimitingHandler(provider.GetRequiredKeyedService<RateLimiter>(UpstreamHosts.Wiki)));
 
+var hiscoresClient = builder.Services.AddGielinomicsHiscoresClient();
+
+hiscoresClient.AddStandardResilienceHandler(options =>
+{
+    // Fewer attempts and a twitchier breaker than the wiki gets. Jagex publishes no rate
+    // limit, which is not the same as not having one.
+    options.Retry.MaxRetryAttempts = 2;
+    options.Retry.UseJitter = true;
+    options.AttemptTimeout.Timeout = TimeSpan.FromSeconds(20);
+    options.TotalRequestTimeout.Timeout = TimeSpan.FromSeconds(90);
+    options.CircuitBreaker.SamplingDuration = TimeSpan.FromMinutes(2);
+});
+
+hiscoresClient.AddHttpMessageHandler(provider =>
+    new RateLimitingHandler(provider.GetRequiredKeyedService<RateLimiter>(UpstreamHosts.Jagex)));
+
 builder.Services.AddOpenTelemetry()
     .ConfigureResource(resource => resource.AddService("gielinomics-ingest"))
     .WithMetrics(metrics => metrics
@@ -87,6 +116,10 @@ builder.Services.AddSingleton<IHostedService>(sp =>
 
 builder.Services.AddHostedService<LatestPriceWorker>();
 builder.Services.AddHostedService<MappingSyncWorker>();
+
+// Walks the tracked-account allowlist. Registered unconditionally: with nothing tracked it
+// idles without making a single request.
+builder.Services.AddHostedService<HiscoreWorker>();
 
 // Phase 1 non-negotiable: cannot be added retroactively.
 builder.Services.AddHostedService<StalenessMonitor>();
@@ -112,4 +145,7 @@ internal static class UpstreamHosts
 {
     /// <summary>The OSRS wiki, which serves the prices API.</summary>
     public const string Wiki = "wiki";
+
+    /// <summary>Jagex, which serves the official hiscores.</summary>
+    public const string Jagex = "jagex";
 }

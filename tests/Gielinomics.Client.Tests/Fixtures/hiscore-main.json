@@ -1,0 +1,314 @@
+{
+  "name": "Lynx Titan",
+  "skills": [
+    {
+      "id": 0,
+      "name": "Overall",
+      "rank": 119608,
+      "level": 2278,
+      "xp": 4600000000
+    },
+    {
+      "id": 1,
+      "name": "Attack",
+      "rank": 15,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 2,
+      "name": "Defence",
+      "rank": 28,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 3,
+      "name": "Strength",
+      "rank": 18,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 4,
+      "name": "Hitpoints",
+      "rank": 7,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 5,
+      "name": "Ranged",
+      "rank": 8,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 6,
+      "name": "Prayer",
+      "rank": 11,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 7,
+      "name": "Magic",
+      "rank": 29,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 8,
+      "name": "Cooking",
+      "rank": 150,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 9,
+      "name": "Woodcutting",
+      "rank": 15,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 10,
+      "name": "Fletching",
+      "rank": 12,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 11,
+      "name": "Fishing",
+      "rank": 9,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 12,
+      "name": "Firemaking",
+      "rank": 47,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 13,
+      "name": "Crafting",
+      "rank": 4,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 14,
+      "name": "Smithing",
+      "rank": 3,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 15,
+      "name": "Mining",
+      "rank": 23,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 16,
+      "name": "Herblore",
+      "rank": 5,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 17,
+      "name": "Agility",
+      "rank": 23,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 18,
+      "name": "Thieving",
+      "rank": 12,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 19,
+      "name": "Slayer",
+      "rank": 2,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 20,
+      "name": "Farming",
+      "rank": 19,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 21,
+      "name": "Runecraft",
+      "rank": 6,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 22,
+      "name": "Hunter",
+      "rank": 3,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 23,
+      "name": "Construction",
+      "rank": 4,
+      "level": 99,
+      "xp": 200000000
+    },
+    {
+      "id": 24,
+      "name": "Sailing",
+      "rank": -1,
+      "level": 1,
+      "xp": 0
+    }
+  ],
+  "activities": [
+    {
+      "id": 0,
+      "name": "Grid Points",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 1,
+      "name": "League Points",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 2,
+      "name": "Deadman Points",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 3,
+      "name": "Bounty Hunter - Hunter",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 4,
+      "name": "Bounty Hunter - Rogue",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 5,
+      "name": "Bounty Hunter (Legacy) - Hunter",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 6,
+      "name": "Bounty Hunter (Legacy) - Rogue",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 7,
+      "name": "Clue Scrolls (all)",
+      "rank": 1135160,
+      "score": 22
+    },
+    {
+      "id": 8,
+      "name": "Clue Scrolls (beginner)",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 9,
+      "name": "Clue Scrolls (easy)",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 10,
+      "name": "Clue Scrolls (medium)",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 11,
+      "name": "Clue Scrolls (hard)",
+      "rank": 683074,
+      "score": 22
+    },
+    {
+      "id": 12,
+      "name": "Clue Scrolls (elite)",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 13,
+      "name": "Clue Scrolls (master)",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 14,
+      "name": "LMS - Rank",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 15,
+      "name": "PvP Arena - Rank",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 16,
+      "name": "Soul Wars Zeal",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 17,
+      "name": "Rifts closed",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 18,
+      "name": "Colosseum Glory",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 19,
+      "name": "Collections Logged",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 89,
+      "name": "Zalcano",
+      "rank": -1,
+      "score": -1
+    },
+    {
+      "id": 90,
+      "name": "Zulrah",
+      "rank": -1,
+      "score": -1
+    }
+  ]
+}
