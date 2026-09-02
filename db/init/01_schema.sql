@@ -77,7 +77,7 @@ CREATE TABLE IF NOT EXISTS ingest_runs (
     target_bucket TIMESTAMPTZ,             -- the window being fetched, when the source has one
     attempted_at  TIMESTAMPTZ NOT NULL DEFAULT now(),
     completed_at  TIMESTAMPTZ,
-    outcome       TEXT NOT NULL,           -- 'ok' | 'http_error' | 'parse_error' | 'db_error'
+    outcome       TEXT NOT NULL,           -- 'running' | 'ok' | 'http_error' | 'parse_error' | 'db_error' | 'unknown_error'
     rows_written  INTEGER,
     detail        TEXT
 );

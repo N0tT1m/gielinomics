@@ -1,3 +1,7 @@
+using Gielinomics.Alerts;
+using Gielinomics.Api.Endpoints;
+using Gielinomics.Api.Infrastructure;
+using Gielinomics.Client;
 using Gielinomics.Data;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,34 +18,46 @@ if (string.IsNullOrWhiteSpace(connectionString))
 }
 
 builder.Services.AddGielinomicsData(connectionString);
+
+// The API needs the tax rules for the margin scan, and the refresher that keeps their exempt
+// set current. It does not evaluate alert rules — that lives in the worker, so a replicated
+// API cannot fire the same rule once per replica.
+builder.Services.AddGielinomicsAlerts();
+
+// Only for account type detection on the track route. The API polls nothing itself; that is
+// the worker's job.
+builder.Services.AddGielinomicsClient(options =>
+    options.UserAgent = builder.Configuration["Gielinomics:UserAgent"]
+        ?? throw new InvalidOperationException(
+            "Gielinomics__UserAgent is not configured. Jagex and the wiki both block default agents."));
+builder.Services.AddGielinomicsHiscoresClient();
+
 builder.Services.AddOpenApi();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
 
+app.UseExceptionHandler();
+app.UseStatusCodePages();
+
 app.MapOpenApi();
-app.MapGet("/health", () => Results.Ok(new { status = "ok" }));
+app.MapGet("/health", () => Results.Ok(new HealthResponse("ok"))).Produces<HealthResponse>();
+
+app.MapItemEndpoints();
+app.MapMarketEndpoints();
+app.MapIngestEndpoints();
+app.MapAlertEndpoints();
+app.MapPlayerEndpoints();
+app.MapWikiEndpoints();
 
 // -----------------------------------------------------------------------------
-// Phase 4 surface, from plan.md. Nothing here ships before there is history to serve.
+// Not mapped: the /api/players/* routes from plan.md.
 //
-//   GET  /api/ingest/status                          per-feed last success, recent failures
-//   GET  /api/ingest/coverage                        fraction of expected windows present
-//   GET  /api/items                                  search, filter by members/limit
-//   GET  /api/items/{id}
-//   GET  /api/items/{id}/prices?from=&to=&interval=
-//   GET  /api/items/{id}/stats                       volatility, mean spread, liquidity
-//   GET  /api/market/movers?window=24h
-//   GET  /api/market/spreads?minVolume=              tax-adjusted via GrandExchangeTaxRules
-//   GET  /api/players/{name}                         resolve through player_names
-//   GET  /api/players/{name}/history?skill=&from=
-//   POST /api/players/{name}/track                   AUTHENTICATED
-//   GET  /api/alerts
-//   POST /api/alerts                                 AUTHENTICATED + WebhookUrlValidator
-//
-// The POSTs must not ship before token auth exists: /track admits unbounded polling load,
-// /alerts hands the server an arbitrary outbound request target.
-//
-// Cursor pagination, Cache-Control on hot reads, ETag on item metadata.
+// They depend on hiscore polling, which plan.md's own scope decision recommends cutting
+// from v1 — that surface is Wise Old Man, whose snapshot history predates anything this
+// project could start collecting. The tables remain in the schema so the decision stays
+// reversible, but shipping routes with no ingest behind them would mean endpoints that
+// can only ever answer 404.
 // -----------------------------------------------------------------------------
 
-app.Run();
+await app.RunAsync();

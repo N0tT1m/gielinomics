@@ -11,6 +11,15 @@ public sealed class GielinomicsClientOptions
     /// <summary>The official hiscores base address.</summary>
     public Uri HiscoresBaseAddress { get; set; } = new("https://secure.runescape.com/");
 
+    /// <summary>
+    /// The OSRS wiki base address, which serves the Bucket structured-data API.
+    /// </summary>
+    /// <remarks>
+    /// A different host from the prices API, despite both being "the wiki" — prices live on
+    /// <c>prices.runescape.wiki</c>, structured data on the wiki proper.
+    /// </remarks>
+    public Uri WikiBaseAddress { get; set; } = new("https://oldschool.runescape.wiki/");
+
     /// <summary>The Wise Old Man v2 base address.</summary>
     public Uri WiseOldManBaseAddress { get; set; } = new("https://api.wiseoldman.net/v2/");
 

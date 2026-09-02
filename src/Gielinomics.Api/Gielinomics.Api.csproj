@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="../Gielinomics.Client/Gielinomics.Client.csproj" />
     <ProjectReference Include="../Gielinomics.Data/Gielinomics.Data.csproj" />
     <ProjectReference Include="../Gielinomics.Alerts/Gielinomics.Alerts.csproj" />
   </ItemGroup>

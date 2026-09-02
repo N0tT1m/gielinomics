@@ -35,6 +35,11 @@ services:
       # Required. The wiki blocks default agents, so the worker refuses to start without it.
       Gielinomics__UserAgent: ${GIELINOMICS_USER_AGENT:?set GIELINOMICS_USER_AGENT in .env}
       Gielinomics__RunBackfill: ${GIELINOMICS_RUN_BACKFILL:-false}
+      ASPNETCORE_URLS: "http://0.0.0.0:8080"
+    ports:
+      # Metrics only. /metrics is the Prometheus scrape endpoint, /health is a liveness probe;
+      # the worker serves no application routes. Host 9091 keeps 8080 free for the api service.
+      - "9091:8080"
 
   api:
     build:
@@ -46,6 +51,9 @@ services:
         condition: service_healthy
     environment:
       ConnectionStrings__Gielinomics: "Host=postgres;Database=gielinomics;Username=gielinomics;Password=${POSTGRES_PASSWORD}"
+      # The API calls the hiscores itself on POST /api/players/{name}/track, to infer the
+      # account type. Jagex blocks default agents too.
+      Gielinomics__UserAgent: ${GIELINOMICS_USER_AGENT:?set GIELINOMICS_USER_AGENT in .env}
       # Bound to all interfaces for development from the Windows box.
       ASPNETCORE_URLS: "http://0.0.0.0:8080"
     ports:
