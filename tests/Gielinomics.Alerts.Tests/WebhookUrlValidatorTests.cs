@@ -1,7 +1,7 @@
 using Gielinomics.Alerts;
 using Xunit;
 
-namespace Gielinomics.Client.Tests;
+namespace Gielinomics.Alerts.Tests;
 
 /// <summary>
 /// An alert rule hands the server a URL it will later make outbound requests to.

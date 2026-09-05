@@ -1,7 +1,7 @@
 using Gielinomics.Alerts;
 using Xunit;
 
-namespace Gielinomics.Client.Tests;
+namespace Gielinomics.Alerts.Tests;
 
 /// <summary>
 /// Tax rules verified against the 29 May 2025 change: 2%, capped at 5M per item,

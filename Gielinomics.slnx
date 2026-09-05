@@ -7,6 +7,9 @@
     <Project Path="src/Gielinomics.Ingest/Gielinomics.Ingest.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="tests/Gielinomics.Alerts.Tests/Gielinomics.Alerts.Tests.csproj" />
+    <Project Path="tests/Gielinomics.Api.Tests/Gielinomics.Api.Tests.csproj" />
+    <Project Path="tests/Gielinomics.Data.Tests/Gielinomics.Data.Tests.csproj" />
     <Project Path="tests/Gielinomics.Client.Tests/Gielinomics.Client.Tests.csproj" />
     <Project Path="tests/Gielinomics.Ingest.Tests/Gielinomics.Ingest.Tests.csproj" />
   </Folder>

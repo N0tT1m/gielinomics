@@ -475,8 +475,23 @@ public sealed class IngestQueryRepository(NpgsqlDataSource dataSource)
 }
 
 /// <summary>Resolves API tokens to callers.</summary>
+/// <remarks>
+/// An interface rather than the concrete repository at the call site, so the token check
+/// on the two write routes can be tested without a database. Auth is the one place where
+/// "covered by an integration test we do not run in CI" means "not covered".
+/// </remarks>
+public interface IApiUserLookup
+{
+    /// <summary>Finds the enabled caller owning a token hash.</summary>
+    /// <param name="tokenHash">SHA-256 of the presented token.</param>
+    /// <param name="cancellationToken">Cancels the read.</param>
+    /// <returns>The caller, or null when the token is unknown or disabled.</returns>
+    Task<ApiUser?> FindByTokenHashAsync(byte[] tokenHash, CancellationToken cancellationToken = default);
+}
+
+/// <summary>Resolves API tokens to callers against Postgres.</summary>
 /// <param name="dataSource">The Postgres data source.</param>
-public sealed class ApiUserRepository(NpgsqlDataSource dataSource)
+public sealed class ApiUserRepository(NpgsqlDataSource dataSource) : IApiUserLookup
 {
     private const string FindSql = """
         SELECT id AS "Id", label AS "Label"
@@ -486,10 +501,7 @@ public sealed class ApiUserRepository(NpgsqlDataSource dataSource)
 
     private readonly NpgsqlDataSource _dataSource = dataSource;
 
-    /// <summary>Finds the enabled caller owning a token hash.</summary>
-    /// <param name="tokenHash">SHA-256 of the presented token.</param>
-    /// <param name="cancellationToken">Cancels the read.</param>
-    /// <returns>The caller, or null when the token is unknown or disabled.</returns>
+    /// <inheritdoc />
     public async Task<ApiUser?> FindByTokenHashAsync(byte[] tokenHash, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(tokenHash);

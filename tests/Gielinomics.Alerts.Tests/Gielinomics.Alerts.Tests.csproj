@@ -12,11 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="../../src/Gielinomics.Client/Gielinomics.Client.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Fixtures/**" CopyToOutputDirectory="PreserveNewest" />
+    <ProjectReference Include="../../src/Gielinomics.Alerts/Gielinomics.Alerts.csproj" />
   </ItemGroup>
 
 </Project>

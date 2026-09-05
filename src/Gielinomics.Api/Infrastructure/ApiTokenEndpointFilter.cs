@@ -19,14 +19,14 @@ namespace Gielinomics.Api.Infrastructure;
 /// </para>
 /// </remarks>
 /// <param name="users">Token lookup.</param>
-public sealed class ApiTokenEndpointFilter(ApiUserRepository users) : IEndpointFilter
+public sealed class ApiTokenEndpointFilter(IApiUserLookup users) : IEndpointFilter
 {
     /// <summary>Key under which the authenticated caller is stashed on the request.</summary>
     public const string ApiUserItemKey = "gielinomics.api_user";
 
     private const string BearerPrefix = "Bearer ";
 
-    private readonly ApiUserRepository _users = users;
+    private readonly IApiUserLookup _users = users;
 
     /// <inheritdoc />
     public async ValueTask<object?> InvokeAsync(EndpointFilterInvocationContext context, EndpointFilterDelegate next)

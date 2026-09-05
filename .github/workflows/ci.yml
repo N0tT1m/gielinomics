@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  dotnet:
+    name: Build and test (.NET)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Restore
+        run: dotnet restore
+
+      # Release, not Debug: TreatWarningsAsErrors is on, and the analyzers that only run in
+      # a Release build are exactly the ones a local `dotnet build` never shows anyone.
+      - name: Build
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --configuration Release --no-build --verbosity normal
+
+      # The client is published from this repo, so a packaging break should fail here rather
+      # than at tag time when the release workflow is the only thing exercising it.
+      - name: Pack the client
+        run: dotnet pack src/Gielinomics.Client --configuration Release --no-build
+
+  web:
+    name: Build (web)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Lint
+        run: npm run lint
+
+      # `npm run build` is `tsc -b && vite build`, so this type-checks as well as bundles.
+      # src/api/schema.ts is generated from the OpenAPI document and committed, which is what
+      # makes a frontend built against a stale API surface a compile error here.
+      - name: Build
+        run: npm run build
+
+  sql:
+    name: Apply the schema
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: timescale/timescaledb:latest-pg16
+        env:
+          POSTGRES_USER: gielinomics
+          POSTGRES_PASSWORD: gielinomics
+          POSTGRES_DB: gielinomics
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U gielinomics"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+
+      # db/init is applied by the container on first start only, so nothing else ever
+      # re-runs it. A syntax error in a file added months ago would otherwise surface on
+      # the next `docker compose down -v`, which is the worst possible moment.
+      - name: Apply db/init in order
+        env:
+          PGPASSWORD: gielinomics
+        run: |
+          for file in db/init/*.sql; do
+            echo "== $file"
+            psql -h localhost -U gielinomics -d gielinomics -v ON_ERROR_STOP=1 -f "$file"
+          done

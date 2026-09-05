@@ -21,8 +21,12 @@ src/
 └── Gielinomics.Alerts/    # Rule evaluation, GE tax, webhook validation
 tests/
 ├── Gielinomics.Client.Tests/   # recorded fixtures, no network in CI
-└── Gielinomics.Ingest.Tests/   # scheduling arithmetic, failure classification
+├── Gielinomics.Ingest.Tests/   # scheduling arithmetic, failure classification
+├── Gielinomics.Alerts.Tests/   # GE tax, webhook allowlist, rule validation, dispatch
+├── Gielinomics.Data.Tests/     # name normalisation, where a rename timeline hangs off
+└── Gielinomics.Api.Tests/      # the token check on the two write routes
 db/init/                 # schema, applied on first container start
+ops/                     # backup, restore, and the restore rehearsal
 web/                     # Vite + React + TS, API types generated from the OpenAPI doc
 ```
 
@@ -217,10 +221,46 @@ Each sync replaces a table wholesale in one transaction — Bucket exposes no ro
 upsert against — using `DELETE` rather than `TRUNCATE`, so readers keep seeing the previous
 contents until it commits rather than stalling on an exclusive lock.
 
+## Backups
+
+**The dataset is the moat, and the moat lives on one disk until you point these somewhere
+else.** Nothing lost here is re-fetchable: the upstream APIs serve recent windows only, so a
+lost month of 5-minute history costs a month of waiting to replace.
+
+```bash
+export GIELINOMICS_BACKUP_DIR=/mnt/ai/backups/gielinomics
+export GIELINOMICS_BACKUP_REMOTE=user@otherbox:/backups/gielinomics
+ops/backup.sh            # pg_dump -Fc, checksummed, pruned, copied off-box
+ops/verify-restore.sh    # restores the newest dump into a scratch db and asserts on row counts
+ops/restore.sh latest    # restores into gielinomics_restore, not over the live database
+```
+
+Both cron lines — the nightly dump and the weekly restore rehearsal — are in
+[`ops/README.md`](ops/README.md), along with why the rehearsal asserts on row counts rather
+than exit codes (a TimescaleDB restore missing its pre/post hooks reports success and leaves
+every hypertable empty), and the point at which `pg_dump` should give way to physical backups.
+
+## Tests and CI
+
+```bash
+dotnet test            # 219 tests, no network, no database
+cd web && npm run build   # tsc -b, so this type-checks the generated API client too
+```
+
+`.github/workflows/ci.yml` runs both on every push and pull request, and additionally applies
+`db/init/*.sql` to a fresh TimescaleDB container — those files are applied by the container on
+first start only, so nothing else ever re-runs them, and a syntax error in one would otherwise
+surface during a `docker compose down -v` at the worst possible moment.
+
+The client publishes to NuGet from `.github/workflows/release-client.yml`, on a `client-v*`
+tag whose version has to match `<Version>` in the csproj or the job fails before pushing.
+
 ## Still to build
 
 - **Wise Old Man** — `plan.md` recommends consuming it for group and competition features
   rather than reimplementing them. Nothing here touches it yet.
+- **Publish the client.** `Gielinomics.Osrs.Client` is at `0.1.0` and packs clean; the release
+  workflow needs a `NUGET_API_KEY` secret in a `nuget` environment before the tag will land.
 
 ## Before writing any margin logic
 

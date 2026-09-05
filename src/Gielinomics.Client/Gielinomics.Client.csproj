@@ -4,12 +4,31 @@
     <!-- This project must not reference any other project in the solution.
          It is a standalone package that happens to have this repo as its first consumer. -->
     <PackageId>Gielinomics.Osrs.Client</PackageId>
-    <Version>0.1.0-alpha</Version>
+    <Version>0.1.0</Version>
     <Description>Typed async .NET client for the Old School RuneScape wiki real-time prices API (v2), the official hiscores, and Wise Old Man.</Description>
     <PackageTags>osrs;runescape;grand-exchange;prices;hiscores;api-client</PackageTags>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <IsPackable>true</IsPackable>
+
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <RepositoryType>git</RepositoryType>
+
+    <!-- Symbols and a source link, so a consumer can step into this package rather than
+         guess at what it did with their request. -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <ContinuousIntegrationBuild Condition="'$(GITHUB_ACTIONS)' == 'true'">true</ContinuousIntegrationBuild>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="README.md" Pack="true" PackagePath="/" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
 
   <ItemGroup>
     <!-- Lua literal quoting is an internal detail, but it is also the escaping that stops an

@@ -36,6 +36,7 @@ public static class DataServiceCollectionExtensions
         services.AddSingleton<MarketQueryRepository>();
         services.AddSingleton<IngestQueryRepository>();
         services.AddSingleton<ApiUserRepository>();
+        services.AddSingleton<IApiUserLookup>(sp => sp.GetRequiredService<ApiUserRepository>());
         services.AddSingleton<AlertRepository>();
         services.AddSingleton<PlayerRepository>();
         services.AddSingleton<WikiRepository>();

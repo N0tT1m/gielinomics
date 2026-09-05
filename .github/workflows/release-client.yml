@@ -1,0 +1,48 @@
+name: Publish client to NuGet
+
+# Tag-driven so the version in the csproj and the version on nuget.org cannot drift:
+# tag `client-v0.1.0` after setting <Version>0.1.0</Version>, and the job refuses if they
+# disagree. Publishing is irreversible — nuget.org does not allow reusing a version.
+on:
+  push:
+    tags: ['client-v*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: nuget
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+
+      - name: Check the tag against the project version
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          tagged="${GITHUB_REF_NAME#client-v}"
+          declared=$(grep -o '<Version>[^<]*</Version>' src/Gielinomics.Client/Gielinomics.Client.csproj \
+            | sed 's/<[^>]*>//g')
+          echo "tag=$tagged project=$declared"
+          [ "$tagged" = "$declared" ] || { echo "::error::tag $tagged does not match <Version>$declared"; exit 1; }
+
+      - name: Test
+        run: dotnet test --configuration Release
+
+      - name: Pack
+        run: dotnet pack src/Gielinomics.Client --configuration Release --output artifacts
+
+      - name: Push
+        env:
+          NUGET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: |
+          [ -n "$NUGET_API_KEY" ] || { echo "::error::NUGET_API_KEY is not set"; exit 1; }
+          dotnet nuget push 'artifacts/*.nupkg' \
+            --api-key "$NUGET_API_KEY" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate

@@ -415,10 +415,10 @@ Everything else in Phase 2 is deferrable. These three are what make the resultin
 
 - Compose stack on goose alongside the existing services: `postgres` (TimescaleDB image), `ingest`, `api`, `grafana`.
 - Bind the API to `0.0.0.0` for development from the Windows box, same as the LocalStack setup.
-- Named volume for Postgres data, with a `pg_dump` cron to `/mnt/ai/backups/`. The dataset is the moat — losing it resets the project.
-- **`pg_dump` degrades badly as hypertables grow.** Fine at first; revisit physical backups (`pg_basebackup` / WAL archiving) once the 5m table is measured in tens of GB.
-- **Test the restore once, before you need it.** An untested backup of the one irreplaceable asset is not a backup.
-- **Get a copy off goose.** The moat currently lives on a single disk in a single box; a drive failure resets the project by however many months of accumulation it holds.
+- Named volume for Postgres data, with a `pg_dump` cron to `/mnt/ai/backups/`. The dataset is the moat — losing it resets the project. **Built:** `ops/backup.sh`, cron line in `ops/README.md`.
+- **`pg_dump` degrades badly as hypertables grow.** Fine at first; revisit physical backups (`pg_basebackup` / WAL archiving) once the 5m table is measured in tens of GB. The size query to watch is in `ops/README.md`.
+- **Test the restore once, before you need it.** An untested backup of the one irreplaceable asset is not a backup. **Built:** `ops/verify-restore.sh` restores the newest dump into a throwaway database and asserts on row counts, weekly from cron. Restoring into an empty database is not the failure mode to guard against — a TimescaleDB restore missing its pre/post hooks reports success and leaves every hypertable empty, which is why the checks are on `count(*)` and not on exit codes.
+- **Get a copy off goose.** The moat currently lives on a single disk in a single box; a drive failure resets the project by however many months of accumulation it holds. `ops/backup.sh` rsyncs to `GIELINOMICS_BACKUP_REMOTE` when it is set, and warns on stderr when it is not. **Still needs a destination chosen.**
 - Grafana over Postgres directly for internal dashboards; the React app is for the public-facing view.
 
 ---
