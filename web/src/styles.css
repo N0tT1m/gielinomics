@@ -297,3 +297,28 @@ tbody tr:hover td { background: var(--page); }
 
 .footnote { color: var(--text-muted); font-size: 12px; margin-top: 20px; }
 .footnote a { color: var(--series-1); }
+
+/* Wiki search hits. A list of articles rather than a table: each entry is a title and a
+   sentence, and a two-column table of those would be a list with extra lines drawn on it. */
+.hits {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.hits li {
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 12px;
+}
+
+.hits li:last-child {
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
+.hits a {
+  font-weight: 600;
+}

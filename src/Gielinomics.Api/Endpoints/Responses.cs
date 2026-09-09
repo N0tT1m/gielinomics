@@ -91,3 +91,19 @@ public sealed record PlayerGainsResponse(
     TimeSpan Period,
     SkillGain? Overall,
     IReadOnlyList<SkillGain> Skills);
+
+/// <summary>The most recent hiscores capture retained for an account.</summary>
+/// <param name="Player">Current display name.</param>
+/// <param name="CapturedAt">When this content was first observed.</param>
+/// <param name="LastSeenAt">When this content was most recently confirmed unchanged.</param>
+/// <param name="MappingVersion">Which index-to-name mapping the payload decodes under.</param>
+/// <param name="Payload">
+/// The upstream hiscores response as captured, so a client written against Jagex reads the
+/// same shape here — activity counters included, which the charted samples do not retain.
+/// </param>
+public sealed record PlayerSnapshotResponse(
+    string Player,
+    DateTimeOffset CapturedAt,
+    DateTimeOffset LastSeenAt,
+    int MappingVersion,
+    System.Text.Json.JsonElement Payload);

@@ -356,3 +356,61 @@ public sealed record GearOption(
     int StatValue,
     long? Price,
     decimal? GpPerPoint);
+
+/// <summary>Static catalogue metadata for one tradeable item, in upstream mapping shape.</summary>
+/// <param name="Id">Item game ID.</param>
+/// <param name="Name">Display name.</param>
+/// <param name="Examine">Examine text.</param>
+/// <param name="Members">Members-only flag.</param>
+/// <param name="Limit">Buy limit per 4 hours, or null when the item has no published limit.</param>
+/// <param name="HighAlch">High alchemy value.</param>
+/// <param name="LowAlch">Low alchemy value.</param>
+/// <param name="Value">Store value.</param>
+/// <param name="Icon">Icon filename.</param>
+public sealed record MappingEntry(
+    int Id,
+    string Name,
+    string? Examine,
+    bool Members,
+    int? Limit,
+    long? HighAlch,
+    long? LowAlch,
+    long? Value,
+    string? Icon);
+
+/// <summary>The most recent observed trade on both sides of the book for one item.</summary>
+/// <param name="ItemId">Item game ID.</param>
+/// <param name="High">Last price a buy offer completed at.</param>
+/// <param name="HighTime">When that trade happened.</param>
+/// <param name="Low">Last price a sell offer completed at.</param>
+/// <param name="LowTime">When that trade happened.</param>
+public sealed record LatestPrice(
+    int ItemId,
+    long? High,
+    DateTimeOffset? HighTime,
+    long? Low,
+    DateTimeOffset? LowTime);
+
+/// <summary>Volume-weighted averages over a window, for one item.</summary>
+/// <param name="ItemId">Item game ID.</param>
+/// <param name="AvgHighPrice">Mean instant-buy price over the window.</param>
+/// <param name="HighPriceVolume">Units bought instantly over the window.</param>
+/// <param name="AvgLowPrice">Mean instant-sell price over the window.</param>
+/// <param name="LowPriceVolume">Units sold instantly over the window.</param>
+public sealed record WindowAverage(
+    int ItemId,
+    long? AvgHighPrice,
+    long HighPriceVolume,
+    long? AvgLowPrice,
+    long LowPriceVolume);
+
+/// <summary>One retained hiscores capture, as stored.</summary>
+/// <param name="CapturedAt">When this content was first observed.</param>
+/// <param name="LastSeenAt">When this content was most recently confirmed unchanged.</param>
+/// <param name="MappingVersion">Which index-to-name mapping the payload decodes under.</param>
+/// <param name="Payload">The upstream response, verbatim, as JSON text.</param>
+public sealed record HiscoreSnapshot(
+    DateTimeOffset CapturedAt,
+    DateTimeOffset LastSeenAt,
+    int MappingVersion,
+    string Payload);

@@ -14,17 +14,19 @@ Gielinor plus economics: the long-run price record for a world that only ever pu
 
 ```
 src/
-├── Gielinomics.Client/    # NuGet: Gielinomics.Osrs.Client. References nothing else here.
+├── Gielinomics.Client/    # NuGet: Gielinomics.Osrs.Client. Prices, hiscores, wiki Bucket,
+│                         #   Wise Old Man. References nothing else here.
 ├── Gielinomics.Data/      # Npgsql + Dapper repositories
 ├── Gielinomics.Ingest/    # BackgroundServices: poll, gap-repair, backfill, staleness
 ├── Gielinomics.Api/       # ASP.NET Core minimal API
-└── Gielinomics.Alerts/    # Rule evaluation, GE tax, webhook validation
+├── Gielinomics.Alerts/    # Rule evaluation, GE tax, webhook validation
+└── Gielinomics.Ai/        # Python: wiki retrieval, the answering agent, the Discord bot
 tests/
 ├── Gielinomics.Client.Tests/   # recorded fixtures, no network in CI
 ├── Gielinomics.Ingest.Tests/   # scheduling arithmetic, failure classification
 ├── Gielinomics.Alerts.Tests/   # GE tax, webhook allowlist, rule validation, dispatch
 ├── Gielinomics.Data.Tests/     # name normalisation, where a rename timeline hangs off
-└── Gielinomics.Api.Tests/      # the token check on the two write routes
+└── Gielinomics.Api.Tests/      # the token check on the two write routes, the price-mirror windows
 db/init/                 # schema, applied on first container start
 ops/                     # backup, restore, and the restore rehearsal
 web/                     # Vite + React + TS, API types generated from the OpenAPI doc
@@ -189,6 +191,58 @@ for the rules they hold to. The one worth repeating here: **a window with no tra
 line rather than interpolating across it.** Drawing a confident straight line through data this
 platform does not have is exactly the claim `ingest_runs` exists to stop anyone making.
 
+## Asking it things
+
+`src/Gielinomics.Ai/` is Python, in a repository that is otherwise C#, and that is the point:
+the retrieval index is a numpy matrix, the embeddings come from `fastembed`, and the answering
+agent is built around both. The .NET half owns ingest, storage, the query API and alerting.
+Neither is improved by being rewritten in the other's language.
+
+It gives the platform two things it did not have:
+
+- **Wiki search by meaning**, in the frontend's Wiki tab and at `GET /api/ai/search`. "Boss that
+  heals itself when you use the wrong attack style" finds the right page without containing any
+  of its words. Retrieval only — no model runs, so it answers in milliseconds and keeps working
+  when the model server is off.
+- **`/trend`**, the question no upstream API can answer. `/latest` and `/24h` say what a thing is
+  worth now; only the retained bars say what it has been *doing*. The command exists only when
+  the AI service is pointed at this platform, and says so when it is not.
+- **A Discord bot** with seventeen slash commands. Distinct from the alerting, which still
+  delivers over outbound webhooks and is untouched: the bot is the half you can talk *to*.
+
+### The integration runs the other way too
+
+The Python clients were written against the wiki's prices API, Jagex's hiscores and Wise Old
+Man. Every one of those answers *what is true right now* and keeps no history — so "is the whip
+worth buying" was answerable and "has the whip been rising" was not.
+
+Set `RELDO_GIELINOMICS_URL` and they read from this platform instead. `src/Gielinomics.Ai/src/reldo/gielinomics.py`
+is the whole of it: three subclasses that override transport and inherit everything else, so
+item-name resolution, the spread sanity check, the liquidity bands and the tax rules are the
+same code whichever way the bytes arrived.
+
+That works because the API serves the **upstream shape** rather than making the Python side
+translate:
+
+| Route | Serves |
+| --- | --- |
+| `GET /api/prices/mapping` | the item catalogue, in `/mapping` shape |
+| `GET /api/prices/latest` | last observed trade per item, in `/latest` shape |
+| `GET /api/prices/{5m,1h,6h,24h}` | volume-weighted averages per item, in `/24h` shape |
+| `GET /api/players/{name}/snapshot` | the retained hiscores payload, verbatim |
+
+The snapshot route serves the stored payload rather than a projection of it deliberately:
+`skill_samples` retains index, rank, level and xp and drops the activity counters entirely, so
+a caller rebuilding a player from the charted history would silently lose every boss kill and
+clue tier.
+
+**Not routed through the platform:** Wise Old Man's efficiency model (EHP, EHB, time-to-max).
+That is a community ratings system, not an observation — proxying it would add a hop and a
+failure mode to reach the same WOM response.
+
+Unset `RELDO_GIELINOMICS_URL` and everything points upstream again. A platform that is down
+costs the history, not the price. See [`src/Gielinomics.Ai/README.md`](src/Gielinomics.Ai/README.md).
+
 ## Wiki structured data
 
 The weekly Bucket sync is what makes the retained prices worth more than the price API alone.
@@ -243,11 +297,12 @@ every hypertable empty), and the point at which `pg_dump` should give way to phy
 ## Tests and CI
 
 ```bash
-dotnet test            # 219 tests, no network, no database
-cd web && npm run build   # tsc -b, so this type-checks the generated API client too
+dotnet test                        # no network, no database
+cd src/Gielinomics.Ai && uv run pytest   # no network, no index, no model
+cd web && npm run build            # tsc -b, so this type-checks the generated API client too
 ```
 
-`.github/workflows/ci.yml` runs both on every push and pull request, and additionally applies
+`.github/workflows/ci.yml` runs all three on every push and pull request, and additionally applies
 `db/init/*.sql` to a fresh TimescaleDB container — those files are applied by the container on
 first start only, so nothing else ever re-runs them, and a syntax error in one would otherwise
 surface during a `docker compose down -v` at the worst possible moment.
@@ -257,8 +312,13 @@ tag whose version has to match `<Version>` in the csproj or the job fails before
 
 ## Still to build
 
-- **Wise Old Man** — `plan.md` recommends consuming it for group and competition features
-  rather than reimplementing them. Nothing here touches it yet.
+- **Consume the Wise Old Man client.** `Gielinomics.Osrs.Client` now covers the v2 API —
+  players, gains, snapshots, groups, competitions and efficiency rates, read-only, with its own
+  `HttpClient` and rate limit budget. Nothing in `Gielinomics.Api` or `Gielinomics.Ingest`
+  calls it yet, and the scope question in `plan.md` — whether group and competition features
+  read WOM or whether the local hiscore polling is the account surface — is what decides how
+  they should. See [the client README](src/Gielinomics.Client/README.md#wise-old-man) for the
+  four things about that API that changed the client's design.
 - **Publish the client.** `Gielinomics.Osrs.Client` is at `0.1.0` and packs clean; the release
   workflow needs a `NUGET_API_KEY` secret in a `nuget` environment before the tag will land.
 

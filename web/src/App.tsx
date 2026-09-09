@@ -7,13 +7,15 @@ import { MonstersView } from './views/MonstersView'
 import { PlayersView } from './views/PlayersView'
 import { SearchView } from './views/SearchView'
 import { WatchlistView } from './views/WatchlistView'
+import { WikiView } from './views/WikiView'
 import { useTheme } from './hooks/useTheme'
 
-type Tab = 'market' | 'items' | 'gear' | 'monsters' | 'watchlist' | 'players' | 'health'
+type Tab = 'market' | 'items' | 'wiki' | 'gear' | 'monsters' | 'watchlist' | 'players' | 'health'
 
 const TABS: readonly { id: Tab; label: string }[] = [
   { id: 'market', label: 'Market' },
   { id: 'items', label: 'Items' },
+  { id: 'wiki', label: 'Wiki' },
   { id: 'gear', label: 'Gear' },
   { id: 'monsters', label: 'Monsters' },
   { id: 'watchlist', label: 'Watchlist' },
@@ -71,6 +73,8 @@ export function App() {
           <MarketView onOpenItem={openItem} />
         ) : tab === 'items' ? (
           <SearchView onOpenItem={openItem} />
+        ) : tab === 'wiki' ? (
+          <WikiView />
         ) : tab === 'gear' ? (
           <GearView onOpenItem={openItem} />
         ) : tab === 'monsters' ? (

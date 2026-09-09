@@ -35,6 +35,33 @@ jobs:
       - name: Pack the client
         run: dotnet pack src/Gielinomics.Client --configuration Release --no-build
 
+  python:
+    name: Lint and test (Python)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: src/Gielinomics.Ai
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+          cache-dependency-glob: src/Gielinomics.Ai/uv.lock
+
+      # --frozen, so a lockfile that no longer satisfies pyproject.toml fails here rather
+      # than resolving to something nobody chose. Same reason the Dockerfile uses it.
+      - name: Install
+        run: uv sync --frozen --all-extras --dev
+
+      - name: Lint
+        run: uv run ruff check src tests
+
+      # No network and no index: every client is exercised through an httpx mock transport,
+      # and the two suites that would need embeddings stub the retriever instead.
+      - name: Test
+        run: uv run pytest -q
+
   web:
     name: Build (web)
     runs-on: ubuntu-latest

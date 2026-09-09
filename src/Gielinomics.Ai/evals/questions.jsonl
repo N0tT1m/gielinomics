@@ -1,0 +1,35 @@
+{"q": "abyssal whip", "expect": ["Abyssal whip"], "kind": "exact-name"}
+{"q": "bandos chestplate stats", "expect": ["Bandos chestplate"], "kind": "exact-name"}
+{"q": "how do I start Dragon Slayer II", "expect": ["Dragon Slayer II"], "kind": "exact-name"}
+{"q": "what does the Ardougne cloak 4 do", "expect": ["Ardougne cloak", "Ardougne Diary"], "kind": "exact-name"}
+{"q": "that boss that heals off its own poison", "expect": ["Vorkath", "Vorkath/Strategies"], "kind": "vague"}
+{"q": "the dragon boss you fight after Dragon Slayer 2", "expect": ["Vorkath"], "kind": "vague"}
+{"q": "snake boss that changes colour", "expect": ["Zulrah"], "kind": "vague"}
+{"q": "best afk way to make money with high slayer", "expect": ["Money making guide", "Slayer"], "kind": "vague"}
+{"q": "that spiky whip upgrade thing", "expect": ["Abyssal tentacle"], "kind": "vague"}
+{"q": "what do I need to wear a fire cape", "expect": ["Fire cape", "TzTok-Jad", "Fight Caves"], "kind": "vague"}
+{"q": "minigame where you catch fish in a boat with a harpoon", "expect": ["Tempoross"], "kind": "vague"}
+{"q": "skill that lets you make potions", "expect": ["Herblore"], "kind": "vague"}
+{"q": "how much prayer xp does a dragon bone give", "expect": ["Dragon bones", "Prayer"], "kind": "lookup"}
+{"q": "requirements for the quest cape", "expect": ["Quest point cape", "Quests"], "kind": "lookup"}
+{"q": "where do I find a slayer master for level 80 combat", "expect": ["Slayer master", "Duradel", "Nieve"], "kind": "lookup"}
+{"q": "fastest way to train mining from 45 to 99", "expect": ["Pay-to-play Mining training", "Mining training"], "kind": "skilling"}
+{"q": "best way to level crafting cheaply", "expect": ["Pay-to-play Crafting training", "Crafting training", "Crafting"], "kind": "skilling"}
+{"q": "how do I train smithing", "expect": ["Pay-to-play Smithing training", "Smithing training", "Smithing"], "kind": "skilling"}
+{"q": "where do I smelt steel bars", "expect": ["Steel bar", "Smithing", "Furnace"], "kind": "skilling"}
+{"q": "what do I need to make an amulet of glory", "expect": ["Amulet of glory", "Crafting"], "kind": "skilling"}
+{"q": "cheapest way to 99 fletching", "expect": ["Pay-to-play Fletching training", "Fletching training", "Fletching"], "kind": "skilling"}
+{"q": "how do I get 70 agility", "expect": ["Pay-to-play Agility training", "Agility training", "Agility"], "kind": "skilling"}
+{"q": "best runecrafting money making method", "expect": ["Runecraft", "Money making guide", "Runecrafting training"], "kind": "skilling"}
+{"q": "what ore do I mine at level 15", "expect": ["Iron ore", "Mining", "Pay-to-play Mining training"], "kind": "skilling"}
+{"q": "how do I make cannonballs", "expect": ["Cannonball", "Smithing"], "kind": "skilling"}
+{"q": "what are the requirements for Monkey Madness II", "expect": ["Monkey Madness II"], "kind": "questing"}
+{"q": "how do I start Recipe for Disaster", "expect": ["Recipe for Disaster"], "kind": "questing"}
+{"q": "which quests give mining experience", "expect": ["Quest experience rewards", "Mining"], "kind": "questing"}
+{"q": "what quests do I need for the barrows gloves", "expect": ["Recipe for Disaster", "Barrows gloves"], "kind": "questing"}
+{"q": "is Dragon Slayer 2 hard", "expect": ["Dragon Slayer II"], "kind": "questing"}
+{"q": "what gear should I use for slayer tasks", "expect": ["Slayer", "Pay-to-play Slayer training", "Slayer training"], "kind": "minmax"}
+{"q": "best in slot melee gear", "expect": ["Best in slot equipment tables", "Melee", "Equipment"], "kind": "minmax"}
+{"q": "how much prayer bonus does a book of law give", "expect": ["Book of law", "Prayer"], "kind": "minmax"}
+{"q": "what should I do with 5m gp", "expect": ["Money making guide", "Grand Exchange"], "kind": "minmax"}
+{"q": "how many yew logs to get 99 fletching", "expect": ["Fletching", "Pay-to-play Fletching training", "Yew logs"], "kind": "minmax"}

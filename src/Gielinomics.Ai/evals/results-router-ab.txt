@@ -1,0 +1,139 @@
+################ ROUTER IN FRONT OF THE MODEL, OR NOT ################
+  answer_eval, 28 cases, --repeat 1, same machine and same afternoon.
+  The pair that matters: fb91398 reverted the router at 20/28 against the
+  model's 22/28, and every one of the six failures it listed now passes.
+
+    with router   27/28   143s   fails: Vorkath
+    model only    26/28   172s   fails: Seers' Village, marlin
+
+  One case apart at --repeat 1 is inside the noise band, and the failure
+  sets are disjoint, so the score alone settles nothing. What settles it is
+  re-running the three cases they disagree on at --repeat 5:
+
+  ---------------- with router
+  [FLAKY] what quest do you need to complete to fight Vorkath    4/5  28.7s
+  [PASS ] what agility level do I need for the Seers' Village    5/5   6.5s
+  [PASS ] what sailing level do i need to catch marlin           5/5   5.2s
+  2/3 cases passed every run  (14/15 answers overall)
+
+  ---------------- model only
+  [FLAKY] what quest do you need to complete to fight Vorkath    4/5  22.9s
+  [FLAKY] what agility level do I need for the Seers' Village    3/5  42.4s
+  [FLAKY] what sailing level do i need to catch marlin           2/5  28.5s
+  0/3 cases passed every run  (9/15 answers overall)
+
+  Vorkath is 4/5 either way: which_quest declines by design, so that case
+  goes to the model on both paths and is flaky on both. It is not evidence
+  about the router in either direction.
+
+  The two the router actually takes go 10/10 against the model's 5/10, and
+  in a tenth of the time. That is the whole result: the router is a real
+  improvement on the cases it accepts and neutral on the ones it declines,
+  which is what the four guards were for.
+
+
+################ THE SAME EVAL AFTER FOUR MORE COMMITS ################
+  answer_eval, 28 cases, --repeat 1, router in front. Same harness and same
+  machine as the A/B above, run again after each change that could move it.
+
+    after the four guards        27/28   143s   fails: Vorkath
+    after the funding handler    27/28   153s   fails: Vorkath
+    after the which_quest fix    28/28   114s   fails: none
+
+  The last of those is the first clean run the eval has recorded, and one
+  run at --repeat 1 cannot tell a real 28 from a lucky one -- two of these
+  cases have been flaky before. The focused numbers underneath it are the
+  ones worth trusting, each at --repeat 5 or 3:
+
+    Vorkath              4/5 -> 5/5      22.9s -> 3.3s
+    Seers' Village       3/5 -> 5/5      42.4s -> 6.5s
+    marlin               2/5 -> 5/5      28.5s -> 5.2s
+    planks               3/3             13.7s
+    smelt                3/3              6.7s
+
+  The wall clock is the quieter result. 114s against the 172s the model
+  alone took, and the cases the router answers are the ones that went to
+  nothing: the whip price 0.0s, both XP questions 0.1s, Vorkath 0.8s.
+
+
+################ THE SAME 28 CASES AT --repeat 3 ################
+  Run to confirm the 28/28 above. It did not confirm it.
+
+    27/28 cases passed every run  (83/84 answers overall)
+    1 flaky -- passed sometimes
+
+    [FLAKY] how long does it take to get from 45 to 99 mining at granite
+            rates?   2/3
+            missing 'hour'
+            got: "I apologize, but the provided tables do not contain the
+                  necessary information to calculate the time required..."
+            passes: the read nudge -> the forced read -> the grounding nudge
+
+  So the clean run was one case lucky, which is what the paragraph above
+  it said to expect and is the reason that paragraph is there.
+
+  The flake is on the model's side of the fence, not the router's.
+  xp_between declines this question by design -- it asks for a duration
+  and states no rate, and the rate is on a wiki page -- so all three runs
+  went to the model, which answered it twice and refused it once. Nothing
+  the router does can make that case more reliable; what would is giving
+  the guides' own xp/hr figures somewhere to be read from, which is a
+  different piece of work from any of this.
+
+  Every case with a flaky history held at 3/3, including the three the
+  --repeat 5 runs above were about:
+
+    Vorkath           3/3   1.8s
+    marlin            3/3   3.0s
+    Seers' Village    3/3   4.2s
+    planks            3/3  13.4s
+    smelt             3/3   6.8s
+
+  Read the two runs together rather than picking one: 28/28 once and
+  83/84 answers over three passes are the same result described at
+  different resolutions, and the second is the one to quote.
+
+
+################ THE DURATION CASE, AND A NOTE ON 8e4062f ################
+  "how long does it take to get from 45 to 99 mining at granite rates?"
+  was the flaky case in the --repeat 3 run above. xp_between declined it,
+  the model answered it twice out of three and refused it once.
+
+    --only granite --repeat 5     before  2/3 (of 3)   ~13s a run
+                                  after   5/5           ~3.8s a run
+
+  It answers by looking up the rate the asker pointed at:
+
+    Mining 45 to 99 is 12,972,919 XP. At 126,000 XP/hour that is 103.0 hours.
+    Pay-to-play Mining training, Levels 45-99: Granite: "The table uses an
+    efficient long-term benchmark of 126,000 experience per hour."
+
+  The sentence is quoted because that section states four rates -- 134,000
+  tick-perfect, a 126,000 long-term benchmark, 120,000-125,000 for players
+  making occasional mistakes, 63,000 without tick manipulation. They are
+  not four opinions about one number, and an answer that gives the figure
+  without saying which one it is has dropped the half that decides whether
+  it applies to the asker.
+
+  Three conditions, each of which was a wrong answer first:
+
+    * the method must be NAMED. Twelve rates overlap 45-99 in that guide,
+      and picking one unprompted is the same act as inventing it.
+    * the method matches on the HEADING. Four brackets mention granite in
+      their prose -- iron ore says to switch to it at 45 -- and one is
+      about it.
+    * the bracket must COVER the whole range. A rate stated for 15-70 does
+      not describe 45 to 99, and pairing the full gap with it contradicts
+      itself in the way consistent_hours_from exists to catch.
+
+  Full run with it in, before the pronoun fix:
+
+    26/28 cases passed every run  (82/84 answers overall)
+    flaky: cannonballs 2/3, jewellery 2/3 -- both model-answered, both
+    wobbling run to run, neither touched by the router.
+
+  Note on the history: this work landed in 8e4062f, whose message
+  describes only the pronoun fix. It was uncommitted when that commit was
+  made and `git add -A` took it along. The commit is accurate about what
+  it says and silent about half of what it contains; this is the missing
+  half rather than a rewrite of it.

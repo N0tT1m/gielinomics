@@ -33,6 +33,36 @@ export type ItemPage = Schema<'PageOfItemSummary'>
 /** Query parameters, taken from the generated operation rather than restated. */
 export type ItemSearchQuery = NonNullable<operations['SearchItems']['parameters']['query']>
 
+
+/**
+ * A wiki search hit from the AI service.
+ *
+ * Hand-written rather than generated: these come from the Python service in
+ * `src/Gielinomics.Ai`, which is not in the .NET OpenAPI document that `generate:api`
+ * reads. Two servers, two contracts — and only one of them generates a schema.
+ */
+export interface WikiHit {
+  readonly title: string
+  readonly summary: string
+  readonly url: string
+  readonly score: number
+  /** Which half of the hybrid retriever found it: "semantic", "keyword", or both. */
+  readonly foundBy: readonly string[]
+}
+
+/** What a wiki search returns. */
+export interface WikiSearchResponse {
+  readonly query: string
+  readonly results: readonly WikiHit[]
+}
+
+/** Whether the AI service can search, and whether it can also answer. */
+export interface AiHealth {
+  readonly status: string
+  readonly search: boolean
+  readonly ask: boolean
+}
+
 /** A failed request, carrying whatever the server said about why. */
 export class ApiError extends Error {
   // Assigned in the body rather than declared as constructor parameter properties: the
@@ -139,4 +169,15 @@ export const api = {
     query: { skill?: number; from?: string; limit?: number },
     signal?: AbortSignal,
   ) => get<PlayerHistoryResponse>(`/players/${encodeURIComponent(name)}/history${toQuery(query)}`, signal),
+
+  /**
+   * Wiki search, from the AI service rather than the query API.
+   *
+   * Retrieval only — no model runs, so this answers in milliseconds and keeps working
+   * when the model server is off.
+   */
+  searchWiki: (query: { q: string; limit?: number }, signal?: AbortSignal) =>
+    get<WikiSearchResponse>(`/ai/search${toQuery(query)}`, signal),
+
+  getAiHealth: (signal?: AbortSignal) => get<AiHealth>('/ai/health', signal),
 }

@@ -1,0 +1,60 @@
+[project]
+name = "reldo"
+version = "0.1.0"
+description = "Ask the Old School RuneScape wiki questions in plain English, and get answers with citations."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "Nathan Moritz" }]
+
+dependencies = [
+    # reldo.live serves the RuneLite receiver on it. Declared even though
+    # discord-py already pulls it in: an undeclared import that happens to work
+    # via somebody else's dependency is one upstream release away from an
+    # ImportError, and this one would take the bot down at startup.
+    "aiohttp>=3.9",
+    "discord-py>=2.4",
+    "fastembed>=0.8",
+    "httpx>=0.28",
+    "numpy>=2.0",
+    "pydantic>=2.9",
+    "pydantic-settings>=2.6",
+]
+
+[project.scripts]
+reldo = "reldo.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/reldo"]
+
+[tool.ruff]
+line-length = 100
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B", "ASYNC"]
+# ASYNC109: our `timeout` args are handed to httpx, not used as asyncio deadlines.
+ignore = ["ASYNC109"]
+
+[tool.ruff.lint.per-file-ignores]
+# web.py is mostly one embedded HTML document -- CSS rules, a few lines of
+# JavaScript, and the markup around them. Wrapping a @keyframes rule or a
+# grid-template-columns declaration at 100 characters makes it harder to read,
+# not easier, and the limit is there to keep Python readable.
+"src/reldo/web.py" = ["E501"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+    "respx>=0.23.1",
+    "ruff>=0.8",
+]

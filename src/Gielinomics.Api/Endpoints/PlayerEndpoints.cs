@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Gielinomics.Api.Infrastructure;
 using Gielinomics.Client.Hiscores;
 using Gielinomics.Data;
@@ -51,6 +52,12 @@ public static class PlayerEndpoints
             .ProducesProblem(StatusCodes.Status400BadRequest)
             .ProducesProblem(StatusCodes.Status404NotFound);
 
+        group.MapGet("/{name}/snapshot", GetSnapshotAsync)
+            .WithName("GetPlayerSnapshot")
+            .WithSummary("The most recent retained hiscores payload for an account, verbatim.")
+            .Produces<PlayerSnapshotResponse>()
+            .ProducesProblem(StatusCodes.Status404NotFound);
+
         group.MapPost("/{name}/track", TrackAsync)
             .WithName("TrackPlayer")
             .WithSummary("Starts tracking an account. Authenticated: tracking adds polling load.")
@@ -85,6 +92,47 @@ public static class PlayerEndpoints
 
         QueryConventions.CacheFor(response, TimeSpan.FromMinutes(5));
         return Results.Ok(new PlayerResponse(player, names));
+    }
+
+    /// <summary>Serves the retained hiscores payload as captured.</summary>
+    /// <param name="players">Account storage.</param>
+    /// <param name="response">The response, for cache headers.</param>
+    /// <param name="name">Any name the account has used.</param>
+    /// <param name="cancellationToken">Cancels the read.</param>
+    /// <returns>The snapshot, or 404 when the account is untracked or not yet polled.</returns>
+    private static async Task<IResult> GetSnapshotAsync(
+        PlayerRepository players,
+        HttpResponse response,
+        string name,
+        CancellationToken cancellationToken)
+    {
+        var player = await players.ResolveAsync(name, cancellationToken).ConfigureAwait(false);
+        if (player is null)
+        {
+            return NotTracked(name);
+        }
+
+        var snapshot = await players.GetLatestSnapshotAsync(player.Id, cancellationToken).ConfigureAwait(false);
+        if (snapshot is null)
+        {
+            return Results.Problem(
+                title: "No snapshot yet",
+                detail: $"{player.DisplayName} is tracked but has not been polled successfully yet.",
+                statusCode: StatusCodes.Status404NotFound);
+        }
+
+        // The payload rides as a parsed element rather than a string. Handing back JSON
+        // wrapped in a JSON string would make every caller decode twice, and would describe
+        // the field in the OpenAPI document as free text rather than an object.
+        using var parsed = JsonDocument.Parse(snapshot.Payload);
+
+        QueryConventions.CacheFor(response, TimeSpan.FromMinutes(5));
+        return Results.Ok(new PlayerSnapshotResponse(
+            player.DisplayName,
+            snapshot.CapturedAt,
+            snapshot.LastSeenAt,
+            snapshot.MappingVersion,
+            parsed.RootElement.Clone()));
     }
 
     /// <summary>Per-skill history.</summary>

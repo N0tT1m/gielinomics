@@ -18,6 +18,7 @@
 | Query API | `Osrs.Api` | ASP.NET Core minimal API over accumulated history. |
 | Alerting | `Osrs.Alerts` | Rule evaluation → Discord webhooks. |
 | Frontend | `web/` | Vite + React + TS. Charts, watchlists, account timelines. |
+| Answering | `Gielinomics.Ai` | **Python.** Wiki retrieval, the agent, the Discord bot. Reads the platform. |
 
 ```
 osrs-platform/
@@ -156,6 +157,14 @@ Useful routes: `/players/{username}`, `/players/{username}/gained`, `/players/{u
 Descriptive User-Agent required. Register for an API key (`x-api-key` header) for higher limits. Check their current documented rate limits before building against it.
 
 Consume this for group/competition features rather than reimplementing. Their snapshot history predates yours by years.
+
+**Built:** `IWiseOldManClient` covers `/players/{username}`, `/gained`, `/snapshots`, `/groups/{id}`, `/groups/{id}/gained`, `/competitions/{id}` and `/efficiency/rates`. Read-only — the write routes force work onto their infrastructure and mutate other people's groups. Three things the live API settled, which the client is shaped around:
+
+- **The `/gained` window is bounded by the snapshots that exist**, not by the period asked for. An account first tracked yesterday answers `period=year` with a one-day window, and dividing by a year overstates the rate by 365x. `startsAt` and `endsAt` are echoed back and have to be read.
+- **`gained: 0` is ambiguous.** An unranked metric reports `-1` at both ends and the difference is computed anyway, so "never ranked" and "ranked but idle" are the same zero. Worse, the two routes disagree: the same unranked activity reads `score: 0` in a snapshot and `-1` under `/gained`. Rank is the only field that means the same thing on both.
+- **Metric families are objects keyed by metric name**, and the set grows with every new boss and skill. Modelled as dictionaries; a record with one property per known boss drops the next one silently.
+
+What is still undecided is whether this *replaces* the local hiscore polling for account-shaped features or supplements it — the scope decision above, which shipped the other way.
 
 ---
 
@@ -409,6 +418,34 @@ Everything else in Phase 2 is deferrable. These three are what make the resultin
 
 **Phase 7 — Wiki Bucket.** Drop tables and item stats. Unlocks GP/hr and gear comparison — the cross-source joins that justify the whole design.
 
+**Phase 8 — The answering layer.** Vendor the Python assistant in as `src/Gielinomics.Ai` and
+point its data clients at this platform.
+
+The reason it is Python and stays Python: the retrieval index is a 54 MB float32 matrix scanned
+with numpy, the embeddings come from `fastembed`, and the agent loop is built on both. The
+reason it is *here* rather than a separate repo: it needs the history, and the history is here.
+
+The integration is deliberately one file. `reldo/gielinomics.py` subclasses the three data
+clients and overrides transport only — `GEClient._get`, `HiscoresClient.lookup`,
+`WomClient.gains` — so item-name resolution, the spread sanity check, the liquidity bands and
+the tax rules are inherited rather than reimplemented against a second set of field names.
+
+That is possible because the API serves the **upstream shape** on `/api/prices/*` and
+`/api/players/{name}/snapshot`. Serving somebody else's contract is a strange thing for an API
+to do and it is the cheapest option available: the alternative was six hundred lines of
+judgement written twice, in two languages, subtly different in one of them.
+
+Two things stay pointed upstream on purpose:
+
+- **WOM efficiency** (EHP, EHB, time-to-max) is a community ratings model, not an observation.
+  Proxying it adds a hop and a failure mode to reach the same response.
+- **Everything, when `RELDO_GIELINOMICS_URL` is unset.** The package remains usable standalone,
+  and a platform that is down costs the history rather than the price.
+
+What the platform gains in return is the first surface anybody can *talk to*: wiki search by
+meaning at `/api/ai/search`, and a Discord bot. The alerting is untouched and still delivers
+over outbound webhooks — routing fired alerts through the bot is a later decision, not this one.
+
 ---
 
 ## Operational
@@ -429,7 +466,6 @@ Things that could have moved and are worth ten minutes each:
 
 - [ ] `index_lite.json` response shape and whether all account tables support it
 - [ ] Current bucket names and fields on `RuneScape:Bucket`
-- [ ] Wise Old Man v2 rate limits and whether an API key is required
 - [ ] Existing NuGet packages' last-publish dates and download counts, to confirm the gap is still open
 
 Resolved:
@@ -437,6 +473,11 @@ Resolved:
 - [x] **Prices API is `v2`,** and `/timeseries` takes `lookback`, not `timestep`. Confirmed live. (`v1` still responds, so don't take a working v1 call as evidence it's current.)
 - [x] **`lookback=1y` returns 365 daily bars** at `timestep: 86400`. No 5m backfill exists. Confirmed live against item 4151.
 - [x] **GE tax:** 2% since 29 May 2025, 5M gp cap per item, no tax under 50 gp, plus the exempt list in the Query API section.
+- [x] **Wise Old Man: 20 requests per 60 seconds, no key required.** Read off the
+  `ratelimit-limit` and `ratelimit-reset` response headers on an anonymous call, confirmed
+  live. A key raises the limit; it is not needed to read. **A descriptive User-Agent is
+  required** — `curl/8.0` is answered with a `403`, same as the wiki. **Built:**
+  `Gielinomics.Client/WiseOldMan/`, read-only, on its own `HttpClient` and rate limit budget.
 
 ---
 

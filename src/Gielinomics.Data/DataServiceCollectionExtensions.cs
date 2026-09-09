@@ -40,6 +40,7 @@ public static class DataServiceCollectionExtensions
         services.AddSingleton<AlertRepository>();
         services.AddSingleton<PlayerRepository>();
         services.AddSingleton<WikiRepository>();
+        services.AddSingleton<PriceMirrorRepository>();
 
         return services;
     }

@@ -44,6 +44,7 @@ app.MapOpenApi();
 app.MapGet("/health", () => Results.Ok(new HealthResponse("ok"))).Produces<HealthResponse>();
 
 app.MapItemEndpoints();
+app.MapPriceMirrorEndpoints();
 app.MapMarketEndpoints();
 app.MapIngestEndpoints();
 app.MapAlertEndpoints();

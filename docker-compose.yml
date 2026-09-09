@@ -59,6 +59,40 @@ services:
     ports:
       - "8080:8080"
 
+  ai:
+    build:
+      context: src/Gielinomics.Ai
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_started
+    environment:
+      # Set, so the price and hiscore clients read this platform's retained
+      # history instead of the upstream APIs. Container name, not localhost:
+      # inside the compose network the API answers on api:8080.
+      RELDO_GIELINOMICS_URL: "http://api:8080"
+      # Only needed to enrol accounts for tracking, which is authenticated.
+      # Unset means the AI can read every tracked account but not add one.
+      RELDO_GIELINOMICS_TOKEN: ${GIELINOMICS_API_TOKEN:-}
+      # The wiki blocks default agents. Shared with the .NET services, because
+      # it is the same deployment identifying itself to the same wiki.
+      RELDO_USER_AGENT: ${GIELINOMICS_USER_AGENT:?set GIELINOMICS_USER_AGENT in .env}
+      # Where the local model server is, for the ask path. Empty is fine: the
+      # default command serves search only, which never touches a model.
+      RELDO_OLLAMA_API_URL: ${RELDO_OLLAMA_API_URL:-}
+      RELDO_DISCORD_TOKEN: ${RELDO_DISCORD_TOKEN:-}
+      RELDO_DISCORD_GUILD_ID: ${RELDO_DISCORD_GUILD_ID:-}
+    volumes:
+      # The embeddings: ~330 MB of build artifact, kept out of the image so a
+      # code change does not mean re-pushing them. Populate with `reldo build`,
+      # or copy an index you already have into the volume.
+      - gielinomics-index:/app/data
+    ports:
+      # Search and ask, for the frontend. 8100 rather than 8080 to leave the
+      # API where it is.
+      - "8100:8100"
+
   grafana:
     image: grafana/grafana:latest
     restart: unless-stopped
@@ -73,4 +107,5 @@ services:
 
 volumes:
   gielinomics-pgdata:
+  gielinomics-index:
   gielinomics-grafana:

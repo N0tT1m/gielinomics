@@ -358,6 +358,44 @@ public sealed partial class PlayerRepository(NpgsqlDataSource dataSource)
         }
     }
 
+    /// <summary>The most recent hiscores payload retained for an account, verbatim.</summary>
+    /// <remarks>
+    /// The stored payload, not a projection of it. <c>skill_samples</c> keeps only what this
+    /// platform charts — index, rank, level, xp — and drops the activity counters entirely, so
+    /// a caller that wants boss kills or clue tiers cannot reconstruct them from the samples.
+    /// Handing back the snapshot as captured means such a caller reads the same shape it would
+    /// have got from Jagex, and loses nothing by asking this platform instead.
+    ///
+    /// Ordered by <c>last_seen_at</c>, not <c>captured_at</c>: the dedup only bumps the former,
+    /// so an account that has not changed in a month has its newest observation recorded there
+    /// while <c>captured_at</c> still points at the month-old first sighting.
+    /// </remarks>
+    /// <param name="playerId">The account.</param>
+    /// <param name="cancellationToken">Cancels the read.</param>
+    /// <returns>The snapshot, or null when nothing has been captured yet.</returns>
+    public async Task<HiscoreSnapshot?> GetLatestSnapshotAsync(
+        long playerId,
+        CancellationToken cancellationToken = default)
+    {
+        var connection = await _dataSource.OpenConnectionAsync(cancellationToken).ConfigureAwait(false);
+        await using (connection.ConfigureAwait(false))
+        {
+            return await connection.QuerySingleOrDefaultAsync<HiscoreSnapshot>(new CommandDefinition(
+                """
+                SELECT captured_at      AS "CapturedAt",
+                       last_seen_at     AS "LastSeenAt",
+                       mapping_version  AS "MappingVersion",
+                       payload::text    AS "Payload"
+                FROM hiscore_snapshots
+                WHERE player_id = @playerId
+                ORDER BY last_seen_at DESC
+                LIMIT 1
+                """,
+                new { playerId },
+                cancellationToken: cancellationToken)).ConfigureAwait(false);
+        }
+    }
+
     /// <summary>Experience and levels gained over a window.</summary>
     /// <param name="playerId">The account.</param>
     /// <param name="from">Start of the window.</param>

@@ -16,3 +16,15 @@ dist/
 /backups/
 *.dump
 *.sql.gz
+
+# Python (src/Gielinomics.Ai)
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# The retrieval index is a build artifact -- ~330MB of floats, rebuilt with
+# `reldo build`, not committed.
+/src/Gielinomics.Ai/data/

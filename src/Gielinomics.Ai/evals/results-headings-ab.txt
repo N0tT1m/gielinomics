@@ -1,0 +1,55 @@
+################ BASELINE: lead paragraphs only ################
+  index: data/index.npz
+  [PASS] [sk] abyssal whip                                              
+  [PASS] [sk] bandos chestplate stats                                   
+  [PASS] [sk] how do I start Dragon Slayer II                           
+  [PASS] [s-] what does the Ardougne cloak 4 do                         
+  [MISS] [--] boss that heals itself when you use the wrong attack style
+  [PASS] [sk] the dragon boss you fight after Dragon Slayer 2           
+  [PASS] [-k] snake boss that changes colour                            
+  [PASS] [sk] best afk way to make money with high slayer               
+  [MISS] [--] that spiky whip upgrade thing                             
+  [PASS] [s-] what do I need to wear a fire cape                        
+  [PASS] [-k] minigame where you catch fish in a boat with a harpoon    
+  [PASS] [sk] skill that lets you make potions                          
+  [PASS] [sk] how much prayer xp does a dragon bone give                
+  [PASS] [sk] requirements for the quest cape                           
+  [PASS] [s-] where do I find a slayer master for level 80 combat       
+
+  recall@8 over 15 questions
+    hybrid    13/15  (87%)
+    semantic  11/15  (73%)
+    keyword   10/15  (67%)
+
+  hybrid, by question kind
+    exact-name   4/4
+    lookup       3/3
+    vague        6/8
+
+################ WITH SECTION HEADINGS ################
+  index: data/index-headings.npz
+  [PASS] [sk] abyssal whip                                              
+  [PASS] [sk] bandos chestplate stats                                   
+  [PASS] [sk] how do I start Dragon Slayer II                           
+  [PASS] [s-] what does the Ardougne cloak 4 do                         
+  [MISS] [--] boss that heals itself when you use the wrong attack style
+  [MISS] [sk] the dragon boss you fight after Dragon Slayer 2           
+  [PASS] [-k] snake boss that changes colour                            
+  [PASS] [sk] best afk way to make money with high slayer               
+  [MISS] [--] that spiky whip upgrade thing                             
+  [PASS] [s-] what do I need to wear a fire cape                        
+  [PASS] [-k] minigame where you catch fish in a boat with a harpoon    
+  [PASS] [sk] skill that lets you make potions                          
+  [PASS] [sk] how much prayer xp does a dragon bone give                
+  [PASS] [sk] requirements for the quest cape                           
+  [PASS] [s-] where do I find a slayer master for level 80 combat       
+
+  recall@8 over 15 questions
+    hybrid    12/15  (80%)
+    semantic  11/15  (73%)
+    keyword   10/15  (67%)
+
+  hybrid, by question kind
+    exact-name   4/4
+    lookup       3/3
+    vague        5/8
