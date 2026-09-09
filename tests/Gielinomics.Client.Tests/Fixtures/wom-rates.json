@@ -1,0 +1,128 @@
+[
+  {
+    "skill": "attack",
+    "methods": [
+      {
+        "startExp": 0,
+        "rate": 15000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 37224,
+        "rate": 38000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 100000,
+        "rate": 55000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 1000000,
+        "rate": 65000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 1210421,
+        "rate": 315000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 13034431,
+        "rate": 505000,
+        "description": "Bonus XP from Slayer"
+      }
+    ],
+    "bonuses": []
+  },
+  {
+    "skill": "defence",
+    "methods": [
+      {
+        "startExp": 0,
+        "rate": 420000,
+        "description": "Chinning in Kruk's Dungeon"
+      }
+    ],
+    "bonuses": [
+      {
+        "originSkill": "defence",
+        "bonusSkill": "ranged",
+        "startExp": 0,
+        "endExp": 200000000,
+        "end": false,
+        "ratio": 1.25
+      },
+      {
+        "originSkill": "defence",
+        "bonusSkill": "prayer",
+        "startExp": 0,
+        "endExp": 200000000,
+        "end": false,
+        "ratio": 0.154
+      }
+    ]
+  },
+  {
+    "skill": "strength",
+    "methods": [
+      {
+        "startExp": 0,
+        "rate": 15000,
+        "description": "Quests"
+      },
+      {
+        "startExp": 37224,
+        "rate": 38000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 61512,
+        "rate": 145000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 449428,
+        "rate": 245000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 1986068,
+        "rate": 300000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 6517253,
+        "rate": 335000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 13034431,
+        "rate": 415000,
+        "description": "Bonus XP from Slayer"
+      }
+    ],
+    "bonuses": []
+  },
+  {
+    "skill": "ranged",
+    "methods": [
+      {
+        "startExp": 0,
+        "rate": 250000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 6517253,
+        "rate": 330000,
+        "description": "Bonus XP from Slayer"
+      },
+      {
+        "startExp": 13034431,
+        "rate": 1190000,
+        "description": "Chinning maniacal monkeys"
+      }
+    ],
+    "bonuses": []
+  }
+]

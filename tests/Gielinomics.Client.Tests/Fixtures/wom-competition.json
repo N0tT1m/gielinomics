@@ -1,0 +1,192 @@
+{
+  "id": 153841,
+  "title": "Pursuit Sailing SOTW 2026",
+  "type": "classic",
+  "startsAt": "2026-09-02T16:00:00.000Z",
+  "endsAt": "2026-09-09T16:00:00.000Z",
+  "groupId": 148,
+  "score": 640,
+  "visible": true,
+  "createdAt": "2026-09-01T20:46:14.043Z",
+  "updatedAt": "2026-09-05T16:03:13.012Z",
+  "metric": "sailing",
+  "metrics": [
+    {
+      "weight": 1,
+      "metric": "sailing",
+      "createdAt": "2026-09-01T20:46:14.043Z"
+    }
+  ],
+  "participantCount": 439,
+  "group": {
+    "id": 148,
+    "name": "Pursuit",
+    "clanChat": "Pursuit",
+    "description": "A social clan offering BOTW/SOTW, PVM events and much more!",
+    "homeworld": 491,
+    "verified": true,
+    "patron": true,
+    "visible": true,
+    "profileImage": "https://img.wiseoldman.net/1713363216256.png",
+    "bannerImage": "https://img.wiseoldman.net/images/1728443625243.png",
+    "score": 550,
+    "createdAt": "2020-07-10T01:55:36.744Z",
+    "updatedAt": "2026-09-05T18:04:52.210Z",
+    "memberCount": 439
+  },
+  "participations": [
+    {
+      "playerId": 386532,
+      "competitionId": 153841,
+      "teamName": null,
+      "createdAt": "2026-09-01T20:46:14.043Z",
+      "updatedAt": "2026-09-05T16:40:37.562Z",
+      "player": {
+        "id": 386532,
+        "username": "d speedarrow",
+        "displayName": "d speedarrow",
+        "type": "regular",
+        "build": "main",
+        "status": "active",
+        "country": null,
+        "patron": false,
+        "exp": 326997824,
+        "ehp": 947.4153799999998,
+        "ehb": 91.10189000000001,
+        "ttm": 123.11385,
+        "tt200m": 12064.84802576933,
+        "registeredAt": "2021-09-30T15:53:20.307Z",
+        "updatedAt": "2026-09-05T16:40:37.256Z",
+        "lastChangedAt": "2026-09-05T16:40:37.256Z",
+        "lastImportedAt": "2023-02-04T02:14:43.202Z"
+      },
+      "deltas": [
+        {
+          "metric": "sailing",
+          "values": {
+            "gained": 3422484,
+            "start": 4212073,
+            "end": 7634557
+          },
+          "levels": {
+            "gained": 6,
+            "start": 87,
+            "end": 93
+          }
+        }
+      ],
+      "progress": {
+        "start": 4212073,
+        "end": 7634557,
+        "gained": 3422484
+      },
+      "levels": {
+        "start": 87,
+        "end": 93,
+        "gained": 6
+      }
+    },
+    {
+      "playerId": 3212300,
+      "competitionId": 153841,
+      "teamName": null,
+      "createdAt": "2026-09-01T20:46:14.043Z",
+      "updatedAt": "2026-09-05T14:19:03.271Z",
+      "player": {
+        "id": 3212300,
+        "username": "rhamnyabooty",
+        "displayName": "Rhamnyabooty",
+        "type": "regular",
+        "build": "main",
+        "status": "active",
+        "country": null,
+        "patron": false,
+        "exp": 73660668,
+        "ehp": 280.1957,
+        "ehb": 41.0521,
+        "ttm": 765.7479799999999,
+        "tt200m": 12732.06770576933,
+        "registeredAt": "2026-06-27T19:18:42.797Z",
+        "updatedAt": "2026-09-05T14:19:02.173Z",
+        "lastChangedAt": "2026-09-04T16:25:21.006Z",
+        "lastImportedAt": null
+      },
+      "deltas": [
+        {
+          "metric": "sailing",
+          "values": {
+            "gained": 2338953,
+            "start": 8117884,
+            "end": 10456837
+          },
+          "levels": {
+            "gained": 2,
+            "start": 94,
+            "end": 96
+          }
+        }
+      ],
+      "progress": {
+        "start": 8117884,
+        "end": 10456837,
+        "gained": 2338953
+      },
+      "levels": {
+        "start": 94,
+        "end": 96,
+        "gained": 2
+      }
+    },
+    {
+      "playerId": 1799045,
+      "competitionId": 153841,
+      "teamName": null,
+      "createdAt": "2026-09-01T20:46:14.043Z",
+      "updatedAt": "2026-09-05T17:20:21.903Z",
+      "player": {
+        "id": 1799045,
+        "username": "0hz monitor",
+        "displayName": "0Hz Monitor",
+        "type": "ultimate",
+        "build": "main",
+        "status": "active",
+        "country": null,
+        "patron": false,
+        "exp": 479400669,
+        "ehp": 2172.38795,
+        "ehb": 644.9313599999999,
+        "ttm": 0,
+        "tt200m": 22268.97005841674,
+        "registeredAt": "2024-03-28T23:30:18.639Z",
+        "updatedAt": "2026-09-05T17:20:21.559Z",
+        "lastChangedAt": "2026-09-05T17:20:21.559Z",
+        "lastImportedAt": null
+      },
+      "deltas": [
+        {
+          "metric": "sailing",
+          "values": {
+            "gained": 2073123,
+            "start": 13530673,
+            "end": 15603796
+          },
+          "levels": {
+            "gained": 0,
+            "start": 99,
+            "end": 99
+          }
+        }
+      ],
+      "progress": {
+        "start": 13530673,
+        "end": 15603796,
+        "gained": 2073123
+      },
+      "levels": {
+        "start": 99,
+        "end": 99,
+        "gained": 0
+      }
+    }
+  ]
+}

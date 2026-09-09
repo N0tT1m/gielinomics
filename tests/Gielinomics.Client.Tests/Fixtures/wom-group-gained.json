@@ -1,0 +1,282 @@
+[
+  {
+    "player": {
+      "id": 4156,
+      "username": "rro",
+      "displayName": "Rro",
+      "type": "regular",
+      "build": "main",
+      "status": "active",
+      "country": "SE",
+      "patron": true,
+      "exp": 1054214740,
+      "ehp": 2055.89813,
+      "ehb": 1849.701849999999,
+      "ttm": 0,
+      "tt200m": 10956.36527576933,
+      "registeredAt": "2020-05-03T16:55:16.933Z",
+      "updatedAt": "2026-09-05T18:44:19.775Z",
+      "lastChangedAt": "2026-09-05T10:39:13.397Z",
+      "lastImportedAt": "2023-06-26T22:03:44.480Z"
+    },
+    "startDate": "2026-08-30T00:32:06.793Z",
+    "endDate": "2026-09-05T18:44:19.775Z",
+    "data": {
+      "gained": 1394575,
+      "start": 1052820165,
+      "end": 1054214740
+    }
+  },
+  {
+    "player": {
+      "id": 30051,
+      "username": "aluminoti",
+      "displayName": "Aluminoti",
+      "type": "ironman",
+      "build": "main",
+      "status": "active",
+      "country": "US",
+      "patron": true,
+      "exp": 806135335,
+      "ehp": 2324.87169,
+      "ehb": 1915.89569,
+      "ttm": 0,
+      "tt200m": 18220.80070699797,
+      "registeredAt": "2020-08-05T14:34:17.096Z",
+      "updatedAt": "2026-09-05T16:13:16.026Z",
+      "lastChangedAt": "2026-09-05T16:13:16.026Z",
+      "lastImportedAt": "2023-06-26T02:15:44.810Z"
+    },
+    "startDate": "2026-08-29T23:05:10.841Z",
+    "endDate": "2026-09-05T16:13:16.026Z",
+    "data": {
+      "gained": 693487,
+      "start": 805441848,
+      "end": 806135335
+    }
+  },
+  {
+    "player": {
+      "id": 1340,
+      "username": "usbc",
+      "displayName": "USBC",
+      "type": "ultimate",
+      "build": "lvl3",
+      "status": "active",
+      "country": "SE",
+      "patron": false,
+      "exp": 178187222,
+      "ehp": 1046.50047,
+      "ehb": 0,
+      "ttm": 1089.23287,
+      "tt200m": 23394.85753841674,
+      "registeredAt": "2020-04-28T23:24:02.299Z",
+      "updatedAt": "2026-09-04T22:06:44.403Z",
+      "lastChangedAt": "2026-09-01T21:53:53.860Z",
+      "lastImportedAt": "2023-06-28T23:42:16.080Z"
+    },
+    "startDate": "2026-08-29T20:40:30.898Z",
+    "endDate": "2026-09-04T22:06:44.403Z",
+    "data": {
+      "gained": 504638,
+      "start": 177682584,
+      "end": 178187222
+    }
+  },
+  {
+    "player": {
+      "id": 19912,
+      "username": "crow653",
+      "displayName": "Crow653",
+      "type": "regular",
+      "build": "main",
+      "status": "active",
+      "country": "US",
+      "patron": false,
+      "exp": 201962203,
+      "ehp": 494.34675,
+      "ehb": 166.9193,
+      "ttm": 570.8427699999999,
+      "tt200m": 12517.91665576933,
+      "registeredAt": "2020-06-30T06:28:15.124Z",
+      "updatedAt": "2026-09-05T02:55:17.634Z",
+      "lastChangedAt": "2026-09-04T02:50:36.660Z",
+      "lastImportedAt": "2021-10-05T01:54:55.048Z"
+    },
+    "startDate": "2026-08-30T02:26:12.102Z",
+    "endDate": "2026-09-05T02:55:17.634Z",
+    "data": {
+      "gained": 41,
+      "start": 201962162,
+      "end": 201962203
+    }
+  },
+  {
+    "player": {
+      "id": 14351,
+      "username": "jonxslays",
+      "displayName": "Jonxslays",
+      "type": "regular",
+      "build": "main",
+      "status": "active",
+      "country": "US",
+      "patron": false,
+      "exp": 50847205,
+      "ehp": 114.95655,
+      "ehb": 28.98291,
+      "ttm": 931.0165699999999,
+      "tt200m": 12897.30685576933,
+      "registeredAt": "2020-06-06T18:08:48.561Z",
+      "updatedAt": "2026-09-05T03:30:16.550Z",
+      "lastChangedAt": "2026-02-26T06:55:11.125Z",
+      "lastImportedAt": "2023-06-29T01:04:19.789Z"
+    },
+    "startDate": "2026-08-30T03:01:05.234Z",
+    "endDate": "2026-09-05T03:30:16.550Z",
+    "data": {
+      "gained": 0,
+      "start": 50847205,
+      "end": 50847205
+    }
+  },
+  {
+    "player": {
+      "id": 1122,
+      "username": "alexsuperfly",
+      "displayName": "Alexsuperfly",
+      "type": "regular",
+      "build": "main",
+      "status": "active",
+      "country": "US",
+      "patron": false,
+      "exp": 292101100,
+      "ehp": 927.71004,
+      "ehb": 167.83076,
+      "ttm": 126.9645399999998,
+      "tt200m": 12084.55336576933,
+      "registeredAt": "2020-04-18T17:18:17.028Z",
+      "updatedAt": "2026-09-05T04:52:17.806Z",
+      "lastChangedAt": "2026-06-11T20:46:25.266Z",
+      "lastImportedAt": "2023-05-03T13:32:11.853Z"
+    },
+    "startDate": "2026-08-30T04:06:15.859Z",
+    "endDate": "2026-09-05T04:52:17.806Z",
+    "data": {
+      "gained": 0,
+      "start": 292101100,
+      "end": 292101100
+    }
+  },
+  {
+    "player": {
+      "id": 1124,
+      "username": "enriath",
+      "displayName": "Enriath",
+      "type": "ironman",
+      "build": "main",
+      "status": "active",
+      "country": "GB",
+      "patron": false,
+      "exp": 303643173,
+      "ehp": 1348.999,
+      "ehb": 370.5937300000001,
+      "ttm": 493.2941099999998,
+      "tt200m": 19196.67339699797,
+      "registeredAt": "2020-04-18T20:03:30.728Z",
+      "updatedAt": "2026-09-05T09:30:18.932Z",
+      "lastChangedAt": "2026-07-10T11:48:39.567Z",
+      "lastImportedAt": "2022-08-19T21:07:51.836Z"
+    },
+    "startDate": "2026-08-30T09:01:42.458Z",
+    "endDate": "2026-09-05T09:30:18.932Z",
+    "data": {
+      "gained": 0,
+      "start": 303643173,
+      "end": 303643173
+    }
+  },
+  {
+    "player": {
+      "id": 1709,
+      "username": "sethmare",
+      "displayName": "Sethmare",
+      "type": "regular",
+      "build": "main",
+      "status": "active",
+      "country": "US",
+      "patron": false,
+      "exp": 192659730,
+      "ehp": 592.29348,
+      "ehb": 204.98528,
+      "ttm": 460.2941999999998,
+      "tt200m": 12419.96992576933,
+      "registeredAt": "2020-05-01T23:51:10.042Z",
+      "updatedAt": "2026-09-05T00:21:34.287Z",
+      "lastChangedAt": "2026-03-29T12:43:03.892Z",
+      "lastImportedAt": "2023-06-30T23:48:26.331Z"
+    },
+    "startDate": "2026-08-30T00:20:45.987Z",
+    "endDate": "2026-09-05T00:21:34.287Z",
+    "data": {
+      "gained": 0,
+      "start": 192659730,
+      "end": 192659730
+    }
+  },
+  {
+    "player": {
+      "id": 5967,
+      "username": "boom",
+      "displayName": "Boom",
+      "type": "regular",
+      "build": "main",
+      "status": "active",
+      "country": "GB",
+      "patron": false,
+      "exp": 210802606,
+      "ehp": 518.5013200000001,
+      "ehb": 92.03497,
+      "ttm": 541.8686399999999,
+      "tt200m": 12493.76208576933,
+      "registeredAt": "2020-05-06T20:22:45.750Z",
+      "updatedAt": "2026-09-05T11:11:19.043Z",
+      "lastChangedAt": "2026-04-06T22:40:12.406Z",
+      "lastImportedAt": "2023-04-16T19:06:25.380Z"
+    },
+    "startDate": "2026-08-30T11:02:12.452Z",
+    "endDate": "2026-09-05T11:11:19.043Z",
+    "data": {
+      "gained": 0,
+      "start": 210802606,
+      "end": 210802606
+    }
+  },
+  {
+    "player": {
+      "id": 9899,
+      "username": "jakesterwars",
+      "displayName": "Jakesterwars",
+      "type": "regular",
+      "build": "main",
+      "status": "active",
+      "country": "US",
+      "patron": true,
+      "exp": 94277443,
+      "ehp": 307.41476,
+      "ehb": 1.07367,
+      "ttm": 741.3319499999999,
+      "tt200m": 12704.84864576933,
+      "registeredAt": "2020-05-18T02:54:10.427Z",
+      "updatedAt": "2026-09-05T04:55:01.090Z",
+      "lastChangedAt": "2026-07-22T00:45:01.705Z",
+      "lastImportedAt": "2022-11-07T11:54:20.482Z"
+    },
+    "startDate": "2026-08-30T04:05:42.971Z",
+    "endDate": "2026-09-05T04:55:01.090Z",
+    "data": {
+      "gained": 0,
+      "start": 94277443,
+      "end": 94277443
+    }
+  }
+]

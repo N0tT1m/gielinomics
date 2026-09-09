@@ -65,6 +65,19 @@ internal sealed class FixtureHandler : HttpMessageHandler
         return new Hiscores.HiscoresClient(http, logger ?? NullLogger<Hiscores.HiscoresClient>.Instance);
     }
 
+    /// <summary>Builds a Wise Old Man client wired to this handler.</summary>
+    /// <returns>The client under test.</returns>
+    public WiseOldMan.WiseOldManClient CreateWiseOldManClient()
+    {
+        var http = new HttpClient(this, disposeHandler: false)
+        {
+            BaseAddress = new Uri("https://api.wiseoldman.net/v2/"),
+        };
+
+        http.DefaultRequestHeaders.UserAgent.ParseAdd("gielinomics-tests/0.1 (github.com/N0tT1m/gielinomics)");
+        return new WiseOldMan.WiseOldManClient(http);
+    }
+
     /// <summary>Serves a recorded body from <c>Fixtures/</c>.</summary>
     /// <param name="fileName">File name within the fixtures directory.</param>
     /// <returns>The handler.</returns>

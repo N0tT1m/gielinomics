@@ -1,0 +1,801 @@
+{
+  "startsAt": "2026-08-30T02:25:01.042Z",
+  "endsAt": "2026-09-05T18:02:18.304Z",
+  "data": {
+    "skills": {
+      "overall": {
+        "metric": "overall",
+        "experience": {
+          "gained": 0,
+          "start": 322896484,
+          "end": 322896484
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 798.48569,
+          "end": 798.48569
+        },
+        "rank": {
+          "gained": 799,
+          "start": 108848,
+          "end": 109647
+        },
+        "level": {
+          "gained": 0,
+          "start": 2293,
+          "end": 2293
+        }
+      },
+      "attack": {
+        "metric": "attack",
+        "experience": {
+          "gained": 0,
+          "start": 27724026,
+          "end": 27724026
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 0,
+          "end": 0
+        },
+        "rank": {
+          "gained": 180,
+          "start": 52113,
+          "end": 52293
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "defence": {
+        "metric": "defence",
+        "experience": {
+          "gained": 0,
+          "start": 20460213,
+          "end": 20460213
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 25.64754,
+          "end": 25.64754
+        },
+        "rank": {
+          "gained": 331,
+          "start": 73577,
+          "end": 73908
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "strength": {
+        "metric": "strength",
+        "experience": {
+          "gained": 0,
+          "start": 25466382,
+          "end": 25466382
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 0,
+          "end": 0
+        },
+        "rank": {
+          "gained": 1034,
+          "start": 183079,
+          "end": 184113
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "hitpoints": {
+        "metric": "hitpoints",
+        "experience": {
+          "gained": 0,
+          "start": 36898940,
+          "end": 36898940
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 0.18449,
+          "end": 0.18449
+        },
+        "rank": {
+          "gained": 814,
+          "start": 172569,
+          "end": 173383
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "ranged": {
+        "metric": "ranged",
+        "experience": {
+          "gained": 0,
+          "start": 23964904,
+          "end": 23964904
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 20.13857,
+          "end": 20.13857
+        },
+        "rank": {
+          "gained": 1084,
+          "start": 275836,
+          "end": 276920
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "prayer": {
+        "metric": "prayer",
+        "experience": {
+          "gained": 0,
+          "start": 5912576,
+          "end": 5912576
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 2.95629,
+          "end": 2.95629
+        },
+        "rank": {
+          "gained": 722,
+          "start": 305092,
+          "end": 305814
+        },
+        "level": {
+          "gained": 0,
+          "start": 91,
+          "end": 91
+        }
+      },
+      "magic": {
+        "metric": "magic",
+        "experience": {
+          "gained": 0,
+          "start": 19350337,
+          "end": 19350337
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 0.09675,
+          "end": 0.09675
+        },
+        "rank": {
+          "gained": 883,
+          "start": 205272,
+          "end": 206155
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "cooking": {
+        "metric": "cooking",
+        "experience": {
+          "gained": 0,
+          "start": 13041081,
+          "end": 13041081
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 14.59959,
+          "end": 14.59959
+        },
+        "rank": {
+          "gained": 958,
+          "start": 421386,
+          "end": 422344
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "woodcutting": {
+        "metric": "woodcutting",
+        "experience": {
+          "gained": 0,
+          "start": 13131036,
+          "end": 13131036
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 62.98995,
+          "end": 62.98995
+        },
+        "rank": {
+          "gained": 719,
+          "start": 201706,
+          "end": 202425
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "fletching": {
+        "metric": "fletching",
+        "experience": {
+          "gained": 0,
+          "start": 13034502,
+          "end": 13034502
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 0.06517,
+          "end": 0.06517
+        },
+        "rank": {
+          "gained": 600,
+          "start": 300591,
+          "end": 301191
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "fishing": {
+        "metric": "fishing",
+        "experience": {
+          "gained": 0,
+          "start": 6525630,
+          "end": 6525630
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 50.96327,
+          "end": 50.96327
+        },
+        "rank": {
+          "gained": 980,
+          "start": 316795,
+          "end": 317775
+        },
+        "level": {
+          "gained": 0,
+          "start": 92,
+          "end": 92
+        }
+      },
+      "firemaking": {
+        "metric": "firemaking",
+        "experience": {
+          "gained": 0,
+          "start": 13070209,
+          "end": 13070209
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 17.0693,
+          "end": 17.0693
+        },
+        "rank": {
+          "gained": 634,
+          "start": 278213,
+          "end": 278847
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "crafting": {
+        "metric": "crafting",
+        "experience": {
+          "gained": 0,
+          "start": 7981434,
+          "end": 7981434
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 18.80034,
+          "end": 18.80034
+        },
+        "rank": {
+          "gained": 890,
+          "start": 307972,
+          "end": 308862
+        },
+        "level": {
+          "gained": 0,
+          "start": 94,
+          "end": 94
+        }
+      },
+      "smithing": {
+        "metric": "smithing",
+        "experience": {
+          "gained": 0,
+          "start": 6535741,
+          "end": 6535741
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 14.4816,
+          "end": 14.4816
+        },
+        "rank": {
+          "gained": 595,
+          "start": 210175,
+          "end": 210770
+        },
+        "level": {
+          "gained": 0,
+          "start": 92,
+          "end": 92
+        }
+      },
+      "mining": {
+        "metric": "mining",
+        "experience": {
+          "gained": 0,
+          "start": 13059499,
+          "end": 13059499
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 115.99268,
+          "end": 115.99268
+        },
+        "rank": {
+          "gained": 662,
+          "start": 174001,
+          "end": 174663
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "herblore": {
+        "metric": "herblore",
+        "experience": {
+          "gained": 0,
+          "start": 7945047,
+          "end": 7945047
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 15.67631,
+          "end": 15.67631
+        },
+        "rank": {
+          "gained": 697,
+          "start": 218131,
+          "end": 218828
+        },
+        "level": {
+          "gained": 0,
+          "start": 94,
+          "end": 94
+        }
+      },
+      "agility": {
+        "metric": "agility",
+        "experience": {
+          "gained": 0,
+          "start": 5029982,
+          "end": 5029982
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 75.89685,
+          "end": 75.89685
+        },
+        "rank": {
+          "gained": 717,
+          "start": 228681,
+          "end": 229398
+        },
+        "level": {
+          "gained": 0,
+          "start": 89,
+          "end": 89
+        }
+      },
+      "thieving": {
+        "metric": "thieving",
+        "experience": {
+          "gained": 0,
+          "start": 13034511,
+          "end": 13034511
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 41.75131,
+          "end": 41.75131
+        },
+        "rank": {
+          "gained": 524,
+          "start": 206347,
+          "end": 206871
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "slayer": {
+        "metric": "slayer",
+        "experience": {
+          "gained": 0,
+          "start": 16849944,
+          "end": 16849944
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 188.19028,
+          "end": 188.19028
+        },
+        "rank": {
+          "gained": 540,
+          "start": 110485,
+          "end": 111025
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "farming": {
+        "metric": "farming",
+        "experience": {
+          "gained": 0,
+          "start": 13668591,
+          "end": 13668591
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 8.38494,
+          "end": 8.38494
+        },
+        "rank": {
+          "gained": 782,
+          "start": 243905,
+          "end": 244687
+        },
+        "level": {
+          "gained": 0,
+          "start": 99,
+          "end": 99
+        }
+      },
+      "runecrafting": {
+        "metric": "runecrafting",
+        "experience": {
+          "gained": 0,
+          "start": 5381386,
+          "end": 5381386
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 75.77372,
+          "end": 75.77372
+        },
+        "rank": {
+          "gained": 705,
+          "start": 200067,
+          "end": 200772
+        },
+        "level": {
+          "gained": 0,
+          "start": 90,
+          "end": 90
+        }
+      },
+      "hunter": {
+        "metric": "hunter",
+        "experience": {
+          "gained": 0,
+          "start": 6517364,
+          "end": 6517364
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 16.79203,
+          "end": 16.79203
+        },
+        "rank": {
+          "gained": 805,
+          "start": 228709,
+          "end": 229514
+        },
+        "level": {
+          "gained": 0,
+          "start": 92,
+          "end": 92
+        }
+      },
+      "construction": {
+        "metric": "construction",
+        "experience": {
+          "gained": 0,
+          "start": 5092582,
+          "end": 5092582
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 5.37128,
+          "end": 5.37128
+        },
+        "rank": {
+          "gained": 708,
+          "start": 233416,
+          "end": 234124
+        },
+        "level": {
+          "gained": 0,
+          "start": 89,
+          "end": 89
+        }
+      },
+      "sailing": {
+        "metric": "sailing",
+        "experience": {
+          "gained": 0,
+          "start": 3220567,
+          "end": 3220567
+        },
+        "ehp": {
+          "gained": 0,
+          "start": 26.66343,
+          "end": 26.66343
+        },
+        "rank": {
+          "gained": 2010,
+          "start": 196664,
+          "end": 198674
+        },
+        "level": {
+          "gained": 0,
+          "start": 84,
+          "end": 84
+        }
+      }
+    },
+    "bosses": {
+      "abyssal_sire": {
+        "metric": "abyssal_sire",
+        "ehb": {
+          "gained": 0,
+          "start": 20.98,
+          "end": 20.98
+        },
+        "rank": {
+          "gained": 186,
+          "start": 30271,
+          "end": 30457
+        },
+        "kills": {
+          "gained": 0,
+          "start": 1049,
+          "end": 1049
+        }
+      },
+      "alchemical_hydra": {
+        "metric": "alchemical_hydra",
+        "ehb": {
+          "gained": 0,
+          "start": 10.06667,
+          "end": 10.06667
+        },
+        "rank": {
+          "gained": 844,
+          "start": 198291,
+          "end": 199135
+        },
+        "kills": {
+          "gained": 0,
+          "start": 302,
+          "end": 302
+        }
+      },
+      "amoxliatl": {
+        "metric": "amoxliatl",
+        "ehb": {
+          "gained": 0,
+          "start": 0,
+          "end": 0
+        },
+        "rank": {
+          "gained": -1,
+          "start": -1,
+          "end": -1
+        },
+        "kills": {
+          "gained": 0,
+          "start": -1,
+          "end": -1
+        }
+      },
+      "araxxor": {
+        "metric": "araxxor",
+        "ehb": {
+          "gained": 0,
+          "start": 0,
+          "end": 0
+        },
+        "rank": {
+          "gained": -1,
+          "start": -1,
+          "end": -1
+        },
+        "kills": {
+          "gained": 0,
+          "start": -1,
+          "end": -1
+        }
+      },
+      "artio": {
+        "metric": "artio",
+        "ehb": {
+          "gained": 0,
+          "start": 0,
+          "end": 0
+        },
+        "rank": {
+          "gained": -1,
+          "start": -1,
+          "end": -1
+        },
+        "kills": {
+          "gained": 0,
+          "start": -1,
+          "end": -1
+        }
+      },
+      "barrows_chests": {
+        "metric": "barrows_chests",
+        "ehb": {
+          "gained": 0,
+          "start": 80.59091,
+          "end": 80.59091
+        },
+        "rank": {
+          "gained": 15,
+          "start": 5671,
+          "end": 5686
+        },
+        "kills": {
+          "gained": 0,
+          "start": 1773,
+          "end": 1773
+        }
+      }
+    },
+    "activities": {
+      "bounty_hunter_hunter": {
+        "metric": "bounty_hunter_hunter",
+        "rank": {
+          "gained": -1,
+          "start": -1,
+          "end": -1
+        },
+        "score": {
+          "gained": 0,
+          "start": -1,
+          "end": -1
+        }
+      },
+      "bounty_hunter_rogue": {
+        "metric": "bounty_hunter_rogue",
+        "rank": {
+          "gained": -1,
+          "start": -1,
+          "end": -1
+        },
+        "score": {
+          "gained": 0,
+          "start": -1,
+          "end": -1
+        }
+      },
+      "clue_scrolls_all": {
+        "metric": "clue_scrolls_all",
+        "rank": {
+          "gained": 533,
+          "start": 130706,
+          "end": 131239
+        },
+        "score": {
+          "gained": 0,
+          "start": 585,
+          "end": 585
+        }
+      },
+      "clue_scrolls_beginner": {
+        "metric": "clue_scrolls_beginner",
+        "rank": {
+          "gained": -1,
+          "start": -1,
+          "end": -1
+        },
+        "score": {
+          "gained": 0,
+          "start": -1,
+          "end": -1
+        }
+      },
+      "clue_scrolls_easy": {
+        "metric": "clue_scrolls_easy",
+        "rank": {
+          "gained": 354,
+          "start": 99943,
+          "end": 100297
+        },
+        "score": {
+          "gained": 0,
+          "start": 107,
+          "end": 107
+        }
+      },
+      "clue_scrolls_medium": {
+        "metric": "clue_scrolls_medium",
+        "rank": {
+          "gained": 370,
+          "start": 124606,
+          "end": 124976
+        },
+        "score": {
+          "gained": 0,
+          "start": 168,
+          "end": 168
+        }
+      }
+    },
+    "computed": {
+      "ehp": {
+        "metric": "ehp",
+        "value": {
+          "gained": 0,
+          "start": 798.48569,
+          "end": 798.48569
+        },
+        "rank": {
+          "gained": 607,
+          "start": 122652,
+          "end": 123259
+        }
+      },
+      "ehb": {
+        "metric": "ehb",
+        "value": {
+          "gained": 0,
+          "start": 314.31051,
+          "end": 314.31051
+        },
+        "rank": {
+          "gained": 590,
+          "start": 149674,
+          "end": 150264
+        }
+      }
+    }
+  }
+}

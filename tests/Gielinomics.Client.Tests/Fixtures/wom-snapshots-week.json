@@ -1,0 +1,536 @@
+[
+  {
+    "id": -1,
+    "playerId": 2,
+    "createdAt": "2026-09-05T18:02:18.304Z",
+    "importedAt": null,
+    "data": {
+      "skills": {
+        "overall": {
+          "metric": "overall",
+          "experience": 322896484,
+          "rank": 109647,
+          "level": 2293,
+          "ehp": 798.48569
+        },
+        "attack": {
+          "metric": "attack",
+          "experience": 27724026,
+          "rank": 52293,
+          "level": 99,
+          "ehp": 0
+        },
+        "defence": {
+          "metric": "defence",
+          "experience": 20460213,
+          "rank": 73908,
+          "level": 99,
+          "ehp": 25.64754
+        },
+        "strength": {
+          "metric": "strength",
+          "experience": 25466382,
+          "rank": 184113,
+          "level": 99,
+          "ehp": 0
+        },
+        "hitpoints": {
+          "metric": "hitpoints",
+          "experience": 36898940,
+          "rank": 173383,
+          "level": 99,
+          "ehp": 0.18449
+        },
+        "ranged": {
+          "metric": "ranged",
+          "experience": 23964904,
+          "rank": 276920,
+          "level": 99,
+          "ehp": 20.13857
+        },
+        "prayer": {
+          "metric": "prayer",
+          "experience": 5912576,
+          "rank": 305814,
+          "level": 91,
+          "ehp": 2.95629
+        },
+        "magic": {
+          "metric": "magic",
+          "experience": 19350337,
+          "rank": 206155,
+          "level": 99,
+          "ehp": 0.09675
+        },
+        "cooking": {
+          "metric": "cooking",
+          "experience": 13041081,
+          "rank": 422344,
+          "level": 99,
+          "ehp": 14.59959
+        },
+        "woodcutting": {
+          "metric": "woodcutting",
+          "experience": 13131036,
+          "rank": 202425,
+          "level": 99,
+          "ehp": 62.98995
+        },
+        "fletching": {
+          "metric": "fletching",
+          "experience": 13034502,
+          "rank": 301191,
+          "level": 99,
+          "ehp": 0.06517
+        },
+        "fishing": {
+          "metric": "fishing",
+          "experience": 6525630,
+          "rank": 317775,
+          "level": 92,
+          "ehp": 50.96327
+        },
+        "firemaking": {
+          "metric": "firemaking",
+          "experience": 13070209,
+          "rank": 278847,
+          "level": 99,
+          "ehp": 17.0693
+        },
+        "crafting": {
+          "metric": "crafting",
+          "experience": 7981434,
+          "rank": 308862,
+          "level": 94,
+          "ehp": 18.80034
+        },
+        "smithing": {
+          "metric": "smithing",
+          "experience": 6535741,
+          "rank": 210770,
+          "level": 92,
+          "ehp": 14.4816
+        },
+        "mining": {
+          "metric": "mining",
+          "experience": 13059499,
+          "rank": 174663,
+          "level": 99,
+          "ehp": 115.99268
+        },
+        "herblore": {
+          "metric": "herblore",
+          "experience": 7945047,
+          "rank": 218828,
+          "level": 94,
+          "ehp": 15.67631
+        },
+        "agility": {
+          "metric": "agility",
+          "experience": 5029982,
+          "rank": 229398,
+          "level": 89,
+          "ehp": 75.89685
+        },
+        "thieving": {
+          "metric": "thieving",
+          "experience": 13034511,
+          "rank": 206871,
+          "level": 99,
+          "ehp": 41.75131
+        },
+        "slayer": {
+          "metric": "slayer",
+          "experience": 16849944,
+          "rank": 111025,
+          "level": 99,
+          "ehp": 188.19028
+        },
+        "farming": {
+          "metric": "farming",
+          "experience": 13668591,
+          "rank": 244687,
+          "level": 99,
+          "ehp": 8.38494
+        },
+        "runecrafting": {
+          "metric": "runecrafting",
+          "experience": 5381386,
+          "rank": 200772,
+          "level": 90,
+          "ehp": 75.77372
+        },
+        "hunter": {
+          "metric": "hunter",
+          "experience": 6517364,
+          "rank": 229514,
+          "level": 92,
+          "ehp": 16.79203
+        },
+        "construction": {
+          "metric": "construction",
+          "experience": 5092582,
+          "rank": 234124,
+          "level": 89,
+          "ehp": 5.37128
+        },
+        "sailing": {
+          "metric": "sailing",
+          "experience": 3220567,
+          "rank": 198674,
+          "level": 84,
+          "ehp": 26.66343
+        }
+      },
+      "bosses": {
+        "abyssal_sire": {
+          "metric": "abyssal_sire",
+          "kills": 1049,
+          "rank": 30457,
+          "ehb": 20.98
+        },
+        "alchemical_hydra": {
+          "metric": "alchemical_hydra",
+          "kills": 302,
+          "rank": 199135,
+          "ehb": 10.06667
+        },
+        "amoxliatl": {
+          "metric": "amoxliatl",
+          "kills": 0,
+          "rank": -1,
+          "ehb": 0
+        },
+        "araxxor": {
+          "metric": "araxxor",
+          "kills": 0,
+          "rank": -1,
+          "ehb": 0
+        },
+        "artio": {
+          "metric": "artio",
+          "kills": 0,
+          "rank": -1,
+          "ehb": 0
+        },
+        "barrows_chests": {
+          "metric": "barrows_chests",
+          "kills": 1773,
+          "rank": 5686,
+          "ehb": 80.59091
+        }
+      },
+      "activities": {
+        "bounty_hunter_hunter": {
+          "metric": "bounty_hunter_hunter",
+          "score": 0,
+          "rank": -1
+        },
+        "bounty_hunter_rogue": {
+          "metric": "bounty_hunter_rogue",
+          "score": 0,
+          "rank": -1
+        },
+        "clue_scrolls_all": {
+          "metric": "clue_scrolls_all",
+          "score": 585,
+          "rank": 131239
+        },
+        "clue_scrolls_beginner": {
+          "metric": "clue_scrolls_beginner",
+          "score": 0,
+          "rank": -1
+        },
+        "clue_scrolls_easy": {
+          "metric": "clue_scrolls_easy",
+          "score": 107,
+          "rank": 100297
+        },
+        "clue_scrolls_medium": {
+          "metric": "clue_scrolls_medium",
+          "score": 168,
+          "rank": 124976
+        }
+      },
+      "computed": {
+        "ehp": {
+          "metric": "ehp",
+          "value": 798.48569,
+          "rank": 123259
+        },
+        "ehb": {
+          "metric": "ehb",
+          "value": 314.31051,
+          "rank": 150264
+        }
+      }
+    }
+  },
+  {
+    "id": -1,
+    "playerId": 2,
+    "createdAt": "2026-09-05T02:55:00.825Z",
+    "importedAt": null,
+    "data": {
+      "skills": {
+        "overall": {
+          "metric": "overall",
+          "experience": 322896484,
+          "rank": 109584,
+          "level": 2293,
+          "ehp": 798.48569
+        },
+        "attack": {
+          "metric": "attack",
+          "experience": 27724026,
+          "rank": 52270,
+          "level": 99,
+          "ehp": 0
+        },
+        "defence": {
+          "metric": "defence",
+          "experience": 20460213,
+          "rank": 73880,
+          "level": 99,
+          "ehp": 25.64754
+        },
+        "strength": {
+          "metric": "strength",
+          "experience": 25466382,
+          "rank": 184025,
+          "level": 99,
+          "ehp": 0
+        },
+        "hitpoints": {
+          "metric": "hitpoints",
+          "experience": 36898940,
+          "rank": 173302,
+          "level": 99,
+          "ehp": 0.18449
+        },
+        "ranged": {
+          "metric": "ranged",
+          "experience": 23964904,
+          "rank": 276801,
+          "level": 99,
+          "ehp": 20.13857
+        },
+        "prayer": {
+          "metric": "prayer",
+          "experience": 5912576,
+          "rank": 305746,
+          "level": 91,
+          "ehp": 2.95629
+        },
+        "magic": {
+          "metric": "magic",
+          "experience": 19350337,
+          "rank": 206069,
+          "level": 99,
+          "ehp": 0.09675
+        },
+        "cooking": {
+          "metric": "cooking",
+          "experience": 13041081,
+          "rank": 422243,
+          "level": 99,
+          "ehp": 14.59959
+        },
+        "woodcutting": {
+          "metric": "woodcutting",
+          "experience": 13131036,
+          "rank": 202362,
+          "level": 99,
+          "ehp": 62.98995
+        },
+        "fletching": {
+          "metric": "fletching",
+          "experience": 13034502,
+          "rank": 301118,
+          "level": 99,
+          "ehp": 0.06517
+        },
+        "fishing": {
+          "metric": "fishing",
+          "experience": 6525630,
+          "rank": 317694,
+          "level": 92,
+          "ehp": 50.96327
+        },
+        "firemaking": {
+          "metric": "firemaking",
+          "experience": 13070209,
+          "rank": 278779,
+          "level": 99,
+          "ehp": 17.0693
+        },
+        "crafting": {
+          "metric": "crafting",
+          "experience": 7981434,
+          "rank": 308766,
+          "level": 94,
+          "ehp": 18.80034
+        },
+        "smithing": {
+          "metric": "smithing",
+          "experience": 6535741,
+          "rank": 210716,
+          "level": 92,
+          "ehp": 14.4816
+        },
+        "mining": {
+          "metric": "mining",
+          "experience": 13059499,
+          "rank": 174605,
+          "level": 99,
+          "ehp": 115.99268
+        },
+        "herblore": {
+          "metric": "herblore",
+          "experience": 7945047,
+          "rank": 218757,
+          "level": 94,
+          "ehp": 15.67631
+        },
+        "agility": {
+          "metric": "agility",
+          "experience": 5029982,
+          "rank": 229321,
+          "level": 89,
+          "ehp": 75.89685
+        },
+        "thieving": {
+          "metric": "thieving",
+          "experience": 13034511,
+          "rank": 206827,
+          "level": 99,
+          "ehp": 41.75131
+        },
+        "slayer": {
+          "metric": "slayer",
+          "experience": 16849944,
+          "rank": 110980,
+          "level": 99,
+          "ehp": 188.19028
+        },
+        "farming": {
+          "metric": "farming",
+          "experience": 13668591,
+          "rank": 244618,
+          "level": 99,
+          "ehp": 8.38494
+        },
+        "runecrafting": {
+          "metric": "runecrafting",
+          "experience": 5381386,
+          "rank": 200717,
+          "level": 90,
+          "ehp": 75.77372
+        },
+        "hunter": {
+          "metric": "hunter",
+          "experience": 6517364,
+          "rank": 229445,
+          "level": 92,
+          "ehp": 16.79203
+        },
+        "construction": {
+          "metric": "construction",
+          "experience": 5092582,
+          "rank": 234051,
+          "level": 89,
+          "ehp": 5.37128
+        },
+        "sailing": {
+          "metric": "sailing",
+          "experience": 3220567,
+          "rank": 198513,
+          "level": 84,
+          "ehp": 26.66343
+        }
+      },
+      "bosses": {
+        "abyssal_sire": {
+          "metric": "abyssal_sire",
+          "kills": 1049,
+          "rank": 30442,
+          "ehb": 20.98
+        },
+        "alchemical_hydra": {
+          "metric": "alchemical_hydra",
+          "kills": 302,
+          "rank": 199056,
+          "ehb": 10.06667
+        },
+        "amoxliatl": {
+          "metric": "amoxliatl",
+          "kills": 0,
+          "rank": -1,
+          "ehb": 0
+        },
+        "araxxor": {
+          "metric": "araxxor",
+          "kills": 0,
+          "rank": -1,
+          "ehb": 0
+        },
+        "artio": {
+          "metric": "artio",
+          "kills": 0,
+          "rank": -1,
+          "ehb": 0
+        },
+        "barrows_chests": {
+          "metric": "barrows_chests",
+          "kills": 1773,
+          "rank": 5685,
+          "ehb": 80.59091
+        }
+      },
+      "activities": {
+        "bounty_hunter_hunter": {
+          "metric": "bounty_hunter_hunter",
+          "score": 0,
+          "rank": -1
+        },
+        "bounty_hunter_rogue": {
+          "metric": "bounty_hunter_rogue",
+          "score": 0,
+          "rank": -1
+        },
+        "clue_scrolls_all": {
+          "metric": "clue_scrolls_all",
+          "score": 585,
+          "rank": 131196
+        },
+        "clue_scrolls_beginner": {
+          "metric": "clue_scrolls_beginner",
+          "score": 0,
+          "rank": -1
+        },
+        "clue_scrolls_easy": {
+          "metric": "clue_scrolls_easy",
+          "score": 107,
+          "rank": 100267
+        },
+        "clue_scrolls_medium": {
+          "metric": "clue_scrolls_medium",
+          "score": 168,
+          "rank": 124936
+        }
+      },
+      "computed": {
+        "ehp": {
+          "metric": "ehp",
+          "value": 798.48569,
+          "rank": 123174
+        },
+        "ehb": {
+          "metric": "ehb",
+          "value": 314.31051,
+          "rank": 150179
+        }
+      }
+    }
+  }
+]

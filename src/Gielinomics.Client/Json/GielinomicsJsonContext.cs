@@ -3,6 +3,7 @@ using System.Text.Json.Serialization;
 using Gielinomics.Client.Hiscores;
 using Gielinomics.Client.Prices;
 using Gielinomics.Client.Wiki;
+using Gielinomics.Client.WiseOldMan;
 
 namespace Gielinomics.Client.Json;
 
@@ -26,6 +27,14 @@ namespace Gielinomics.Client.Json;
 [JsonSerializable(typeof(BucketEnvelope<BucketDrop>), TypeInfoPropertyName = "BucketEnvelopeBucketDrop")]
 [JsonSerializable(typeof(BucketEnvelope<BucketMonster>), TypeInfoPropertyName = "BucketEnvelopeBucketMonster")]
 [JsonSerializable(typeof(DropDetail))]
+[JsonSerializable(typeof(WiseOldManPlayer))]
+[JsonSerializable(typeof(WiseOldManGains))]
+[JsonSerializable(typeof(IReadOnlyList<WiseOldManSnapshot>), TypeInfoPropertyName = "IReadOnlyListWiseOldManSnapshot")]
+[JsonSerializable(typeof(WiseOldManGroup))]
+[JsonSerializable(typeof(IReadOnlyList<WiseOldManGroupGains>), TypeInfoPropertyName = "IReadOnlyListWiseOldManGroupGains")]
+[JsonSerializable(typeof(WiseOldManCompetition))]
+[JsonSerializable(typeof(IReadOnlyList<WiseOldManEfficiencyRate>), TypeInfoPropertyName = "IReadOnlyListWiseOldManEfficiencyRate")]
+[JsonSerializable(typeof(WiseOldManError))]
 public sealed partial class GielinomicsJsonContext : JsonSerializerContext
 {
 }
